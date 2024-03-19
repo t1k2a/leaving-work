@@ -1,9 +1,15 @@
 import axios from "axios";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 
 export default async (req: any, res: any) => {
   try {
     const now = new Date();
-    const formatted = now.toLocaleTimeString("ja-JP");
+    dayjs.extend(utc);
+    dayjs.extend(timezone);
+    const formatted = dayjs(now).tz("Asia/Tokyo").format("HH:mm");
+
     await axios.post(
       "https://api.line.me/v2/bot/message/push",
       {
