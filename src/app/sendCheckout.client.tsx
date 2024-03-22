@@ -20,7 +20,6 @@ function SendCheckout() {
     <button
       className={checckoutStyles.checkoutButton}
       id="checkout"
-      onClick={handleClick}
       onTouchEnd={handleClick}
     >
       退勤する
