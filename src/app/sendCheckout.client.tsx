@@ -21,6 +21,7 @@ function SendCheckout() {
       className={checckoutStyles.checkoutButton}
       id="checkout"
       onTouchEnd={handleClick}
+      disabled
     >
       退勤する
     </button>
