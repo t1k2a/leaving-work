@@ -18,10 +18,10 @@ function CheckoutWithText() {
 
   if (isOpen) {
     main.style.background = "gray";
-    checkout.disabled = true;
+    checkout.style.opacity = "0.5";
   } else {
     main.style.background = "rgb(214, 219, 220)";
-    checkout.disabled = false;
+    checkout.style.opacity = "1";
   }
 
   const openModal = function () {
@@ -44,13 +44,33 @@ function CheckoutWithText() {
   return (
     <>
       <div>
-        <div className={checkoutWithTextStyle.square} onTouchEnd={openModal}>
+        <div
+          className={checkoutWithTextStyle.square}
+          onTouchEnd={isOpen ? undefined : openModal}
+        >
           <p className={checkoutWithTextStyle.text}>テキストをつけて退勤</p>
         </div>
       </div>
       {isOpen && (
-        <section id="info">
-          <div>
+        <section
+          id="info"
+          style={{
+            position: "absolute",
+          }}
+        >
+          <div style={{ position: "relative", height: "40px" }}>
+            <span
+              className={checkoutWithTextStyle.batsu}
+              onTouchEnd={openModal}
+            ></span>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-end",
+            }}
+          >
             <input
               type="text"
               name="text"
@@ -58,16 +78,21 @@ function CheckoutWithText() {
                 width: "200pt",
                 height: "130pt",
                 background: "white",
-                position: "absolute",
                 borderRadius: "20px",
                 top: "0",
                 right: "0",
                 bottom: "390px",
                 left: "0",
                 margin: "auto",
+                color: "black",
               }}
             />
-            <p className={checkoutWithTextStyle.text}>テキストをつけて退勤</p>
+            <button
+              className={checkoutWithTextStyle.squareButton}
+              onTouchEnd={handleClick}
+            >
+              退勤する
+            </button>
           </div>
         </section>
       )}
