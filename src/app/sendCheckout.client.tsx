@@ -1,8 +1,10 @@
 "use client";
-import React from "react";
+import { useState } from "react";
 import checckoutStyles from "./checkout.module.css";
 
 function SendCheckout() {
+  const [isOpen, setIsOpen] = useState(false);
+
   const handleClick = async function () {
     await fetch("/api/checkout", {
       method: "POST",
@@ -20,7 +22,8 @@ function SendCheckout() {
     <button
       className={checckoutStyles.checkoutButton}
       id="checkout"
-      onTouchEnd={handleClick}
+      onTouchEnd={isOpen ? handleClick : undefined}
+      disabled
     >
       退勤する
     </button>

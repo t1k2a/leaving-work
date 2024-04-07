@@ -9,6 +9,12 @@ export default async (req: any, res: any) => {
     dayjs.extend(utc);
     dayjs.extend(timezone);
     const formatted = dayjs(now).tz("Asia/Tokyo").format("HH:mm");
+    let text = `${formatted}:退勤しました！`;
+    const prependText = req.body.text;
+
+    if (prependText) {
+      text = text + "\n追加テキスト：\n" + prependText;
+    }
 
     await axios.post(
       "https://api.line.me/v2/bot/message/push",
@@ -17,7 +23,7 @@ export default async (req: any, res: any) => {
         messages: [
           {
             type: "text",
-            text: `${formatted}:退勤しました！`,
+            text: text,
           },
         ],
       },
