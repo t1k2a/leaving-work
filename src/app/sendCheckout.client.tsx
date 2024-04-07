@@ -22,7 +22,7 @@ function SendCheckout() {
     <button
       className={checckoutStyles.checkoutButton}
       id="checkout"
-      onTouchEnd={isOpen ? handleClick : undefined}
+      onTouchEnd={handleClick}
       disabled
     >
       退勤する
