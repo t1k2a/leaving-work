@@ -22,6 +22,10 @@
   margin-top: 10px;
 }
 
+.section {
+  position: absolute;
+}
+
 .batsu {
   display: block;
   position: absolute;
@@ -48,4 +52,34 @@
 
 .batsu::after {
   transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.modal {
+  position: relative;
+  height: 40px;
+}
+
+.modalField {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.modalTextArea {
+  width: 200pt;
+  height: 130pt;
+  background: white;
+  border: none;
+  border-radius: 20px;
+  top: 0;
+  right: 0;
+  bottom: 390px;
+  left: 0;
+  margin: auto;
+  color: black;
+  padding: 20px;
+}
+
+.modalPreview {
+  display: flex;
 }

@@ -4,6 +4,7 @@ import checkoutWithTextStyle from "./checkoutWithText.module.css";
 
 function CheckoutWithText() {
   const [isOpen, setIsOpen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
 
   if (typeof document == "undefined") {
     return;
@@ -28,12 +29,17 @@ function CheckoutWithText() {
     setIsOpen(!isOpen);
   };
 
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInputValue(event.target.value);
+  };
+
   const handleClick = async function () {
     await fetch("/api/checkout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify({ text: inputValue }),
     }).then((response) => {
       if (response.ok) {
         alert("退勤が記録されました");
@@ -52,41 +58,29 @@ function CheckoutWithText() {
         </div>
       </div>
       {isOpen && (
-        <section
-          id="info"
-          style={{
-            position: "absolute",
-          }}
-        >
-          <div style={{ position: "relative", height: "40px" }}>
+        <section id="info" className={checkoutWithTextStyle.section}>
+          <div className={checkoutWithTextStyle.modal}>
             <span
               className={checkoutWithTextStyle.batsu}
               onTouchEnd={openModal}
             ></span>
           </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-end",
-            }}
-          >
-            <input
-              type="text"
+          <div className={checkoutWithTextStyle.modalField}>
+            <textarea
               name="text"
-              style={{
-                width: "200pt",
-                height: "130pt",
-                background: "white",
-                borderRadius: "20px",
-                top: "0",
-                right: "0",
-                bottom: "390px",
-                left: "0",
-                margin: "auto",
-                color: "black",
-              }}
-            />
+              className={checkoutWithTextStyle.modalTextArea}
+              onChange={handleChange}
+            ></textarea>
+            {/* 後続にて実装 */}
+            {/* {inputValue && (
+              <div className={checkoutWithTextStyle.modalPreview}>
+                <p>プレビュー：</p>
+                <CurrentTime />
+                <br></br>
+                <p>{inputValue}</p>
+              </div>
+            )} */}
+
             <button
               className={checkoutWithTextStyle.squareButton}
               onTouchEnd={handleClick}
