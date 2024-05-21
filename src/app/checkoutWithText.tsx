@@ -43,6 +43,7 @@ function CheckoutWithText() {
     }).then((response) => {
       if (response.ok) {
         alert("退勤が記録されました");
+        openModal();
       }
     });
   };
