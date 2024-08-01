@@ -2,6 +2,11 @@ import axios from "axios";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+// @ts-ignore
+import HomePlayer from "google-home-player";
+
+// 初期設定
+const googleHome = new HomePlayer(process.env.IP, "ja");
 
 export default async (req: any, res: any) => {
   try {
@@ -34,6 +39,8 @@ export default async (req: any, res: any) => {
         },
       }
     );
+    googleHome.say("退勤しました");
+
     res.send("退勤に成功しました");
   } catch (error: any) {
     console.log(error.response.data);
