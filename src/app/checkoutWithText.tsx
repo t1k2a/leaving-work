@@ -50,14 +50,12 @@ function CheckoutWithText() {
 
   return (
     <>
-      <div>
         <div
           className={checkoutWithTextStyle.square}
           onTouchEnd={isOpen ? undefined : openModal}
         >
           <p className={checkoutWithTextStyle.text}>テキストをつけて退勤</p>
         </div>
-      </div>
       {isOpen && (
         <section id="info" className={checkoutWithTextStyle.section}>
           <div className={checkoutWithTextStyle.modal}>
