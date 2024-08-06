@@ -36,7 +36,7 @@ export default async (req: any, res: any) => {
     );
 
     await axios.post(
-      "https://97ed-2404-7a81-2061-a00-9cbc-beaf-8cac-6ed6.ngrok-free.app",
+      "https://97ed-2404-7a81-2061-a00-9cbc-beaf-8cac-6ed6.ngrok-free.app/api",
       text,
       {
         headers: {
