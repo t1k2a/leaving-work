@@ -37,7 +37,7 @@ export default async (req: any, res: any) => {
 
     await axios.post(
       `${process.env.NGROK_URL}`,
-      { text: `${text}` },
+      text,
       {
         headers: {
           "Content-Type": "application/json",
