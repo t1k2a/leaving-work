@@ -16,7 +16,7 @@ export default async (req: any, res: any) => {
       text = text + "\n追加テキスト：\n" + prependText;
     }
     await axios.post(
-      "https://api.line.me/v2/bot/message/psh",
+      "https://api.line.me/v2/bot/message/push",
       {
         to: process.env.ACCOUNT_ID,
         messages: [
