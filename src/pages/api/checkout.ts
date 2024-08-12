@@ -2,22 +2,21 @@ import axios from "axios";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import { ErrorHandler } from '../../app/utility/ErrorHandler'
 
 export default async (req: any, res: any) => {
+  const now = new Date();
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
+  const formatted = dayjs(now).tz("Asia/Tokyo").format("HH:mm");
+  let text = `${formatted}:退勤しました！`;
   try {
-    const now = new Date();
-    dayjs.extend(utc);
-    dayjs.extend(timezone);
-    const formatted = dayjs(now).tz("Asia/Tokyo").format("HH:mm");
-    let text = `${formatted}:退勤しました！`;
     const prependText = req.body.text;
-
     if (prependText) {
       text = text + "\n追加テキスト：\n" + prependText;
     }
-
     await axios.post(
-      "https://api.line.me/v2/bot/message/push",
+      "https://api.line.me/v2/bot/message/psh",
       {
         to: process.env.ACCOUNT_ID,
         messages: [
@@ -34,9 +33,16 @@ export default async (req: any, res: any) => {
         },
       }
     );
+  res.send("退勤に成功しました");
+  } catch (error: any) {
+    ErrorHandler.handleError(error, res)
+    return;
+  }
 
+  //TODO 下記処理は別ファイルに書き出したい
+  try {
     await axios.post(
-      "https://10f8-2404-7a81-2061-a00-8ff-df18-5809-6830.ngrok-free.app/api",
+      `${process.env.NGROK_URL}`,
       text,
       {
         headers: {
@@ -44,9 +50,7 @@ export default async (req: any, res: any) => {
         },
       }
     );
-    res.send("退勤に成功しました");
   } catch (error: any) {
-    console.log(error.response.data);
-    res.status(500).send("退勤する際にアプリケーションエラーが発生しました");
+    ErrorHandler.handleError(error, res)
   }
 };
