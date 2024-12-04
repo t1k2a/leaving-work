@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import checckoutStyles from "./checkout.module.css";
+import checckoutStyles from "../styles/checkout.module.css";
 
 function SendCheckout() {
   const [isOpen, setIsOpen] = useState(false);

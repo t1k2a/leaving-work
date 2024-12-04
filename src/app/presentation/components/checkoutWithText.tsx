@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import checkoutWithTextStyle from "./checkoutWithText.module.css";
+import checkoutWithTextStyle from "../styles/checkoutWithText.module.css";
 
 function CheckoutWithText() {
   const [isOpen, setIsOpen] = useState(false);
@@ -50,12 +50,12 @@ function CheckoutWithText() {
 
   return (
     <>
-        <div
-          className={checkoutWithTextStyle.square}
-          onTouchEnd={isOpen ? undefined : openModal}
-        >
-          <p className={checkoutWithTextStyle.text}>テキストをつけて退勤</p>
-        </div>
+      <div
+        className={checkoutWithTextStyle.square}
+        onTouchEnd={isOpen ? undefined : openModal}
+      >
+        <p className={checkoutWithTextStyle.text}>テキストをつけて退勤</p>
+      </div>
       {isOpen && (
         <section id="info" className={checkoutWithTextStyle.section}>
           <div className={checkoutWithTextStyle.modal}>
