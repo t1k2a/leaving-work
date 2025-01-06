@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import checkoutWithTextStyle from "../styles/checkoutWithText.module.css";
+import checkoutAPI from "@/pages/api/checkoutAPI";
 
 function CheckoutWithText() {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,19 +34,8 @@ function CheckoutWithText() {
     setInputValue(event.target.value);
   };
 
-  const handleClick = async function () {
-    await fetch("/api/checkout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ text: inputValue }),
-    }).then((response) => {
-      if (response.ok) {
-        alert("退勤が記録されました");
-        openModal();
-      }
-    });
+  const handleClickDOM = async () => {
+    (await checkoutAPI(inputValue)) ? openModal() : null;
   };
 
   return (
@@ -82,7 +72,7 @@ function CheckoutWithText() {
 
             <button
               className={checkoutWithTextStyle.squareButton}
-              onTouchEnd={handleClick}
+              onTouchEnd={handleClickDOM}
             >
               退勤する
             </button>

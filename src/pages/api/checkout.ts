@@ -2,7 +2,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import { ErrorHandler } from '../../app/utility/ErrorHandler'
+import { ErrorHandler } from "../../app/utility/ErrorHandler";
 
 export default async (req: any, res: any) => {
   const now = new Date();
@@ -33,24 +33,19 @@ export default async (req: any, res: any) => {
         },
       }
     );
-  res.send("退勤に成功しました");
   } catch (error: any) {
-    ErrorHandler.handleError(error, res)
+    ErrorHandler.handleError(error, res);
     return;
   }
 
   //TODO 下記処理は別ファイルに書き出したい
   try {
-    await axios.post(
-      `${process.env.NGROK_URL}`,
-      text,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    await axios.post(`${process.env.NGROK_URL}`, text, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   } catch (error: any) {
-    ErrorHandler.handleError(error, res)
+    ErrorHandler.handleError(error, res);
   }
 };
