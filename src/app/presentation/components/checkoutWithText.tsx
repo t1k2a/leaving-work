@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
 import checkoutWithTextStyle from "../styles/checkoutWithText.module.css";
-import checkoutAPI from "@/pages/api/checkoutAPI";
+import { sendCheckoutRequest } from "@/app/utility/callApi";
+import showAlertForCheckout from "@/app/utility/showAlertForCheckout";
 
 function CheckoutWithText() {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,7 +36,8 @@ function CheckoutWithText() {
   };
 
   const handleClickDOM = async () => {
-    (await checkoutAPI(inputValue)) ? openModal() : null;
+    const responseStatus = await sendCheckoutRequest(inputValue);
+    showAlertForCheckout(responseStatus, openModal)
   };
 
   return (
