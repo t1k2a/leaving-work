@@ -1,30 +1,19 @@
 "use client";
 import checckoutStyles from "../styles/checkout.module.css";
-import checkoutAPI from "@/pages/api/checkoutAPI";
+import { sendCheckoutRequest } from "@/app/utility/callApi";
+import showAlertForCheckout from "@/app/utility/showAlertForCheckout";
 
 function SendCheckout() {
   const handleClick = async function () {
-    await fetch("/api/checkout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((response) => {
-      if (response.ok) {
-        alert("退勤が記録されました");
-      }
-    });
-  };
-
-  const handleClickDOM = async () => {
-    await checkoutAPI(null);
+    const responseStatus = await sendCheckoutRequest(null);
+    showAlertForCheckout(responseStatus)
   };
 
   return (
     <button
       className={checckoutStyles.checkoutButton}
       id="checkout"
-      onTouchEnd={handleClickDOM}
+      onTouchEnd={handleClick}
       disabled
     >
       退勤する

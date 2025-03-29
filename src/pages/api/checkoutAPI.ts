@@ -1,17 +1,19 @@
-async function checkoutAPI(inputValue: string | null): Promise<any> {
-  const response = await fetch("/api/checkout", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ text: inputValue }),
-  });
+import { ErrorHandler } from "../../app/utility/ErrorHandler";
 
-  if (!response.ok) {
-    throw new Error("退勤の際にエラーが発生したため、送信を取り消します");
+export default async function checkoutAPI(inputValue: string | null): Promise<any> {
+  try {
+    // Promise型の値を返すfetchにおいては非同期処理が必須となる
+    const response = await fetch("/api/checkout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ text: inputValue }),
+    });
+
+    return response.status;
+  } catch (error: any) {
+      ErrorHandler.handleError(error, null);
+      return;
   }
-
-  return response.json();
 }
-
-export default checkoutAPI;
