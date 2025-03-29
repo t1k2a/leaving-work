@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
-import checkoutWithTextStyle from "./checkoutWithText.module.css";
+import checkoutWithTextStyle from "../styles/checkoutWithText.module.css";
+import { sendCheckoutRequest } from "@/app/utility/callApi";
+import showAlertForCheckout from "@/app/utility/showAlertForCheckout";
 
 function CheckoutWithText() {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,29 +35,19 @@ function CheckoutWithText() {
     setInputValue(event.target.value);
   };
 
-  const handleClick = async function () {
-    await fetch("/api/checkout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ text: inputValue }),
-    }).then((response) => {
-      if (response.ok) {
-        alert("退勤が記録されました");
-        openModal();
-      }
-    });
+  const handleClickDOM = async () => {
+    const responseStatus = await sendCheckoutRequest(inputValue);
+    showAlertForCheckout(responseStatus, openModal)
   };
 
   return (
     <>
-        <div
-          className={checkoutWithTextStyle.square}
-          onTouchEnd={isOpen ? undefined : openModal}
-        >
-          <p className={checkoutWithTextStyle.text}>テキストをつけて退勤</p>
-        </div>
+      <div
+        className={checkoutWithTextStyle.square}
+        onTouchEnd={isOpen ? undefined : openModal}
+      >
+        <p className={checkoutWithTextStyle.text}>テキストをつけて退勤</p>
+      </div>
       {isOpen && (
         <section id="info" className={checkoutWithTextStyle.section}>
           <div className={checkoutWithTextStyle.modal}>
@@ -82,7 +74,7 @@ function CheckoutWithText() {
 
             <button
               className={checkoutWithTextStyle.squareButton}
-              onTouchEnd={handleClick}
+              onTouchEnd={handleClickDOM}
             >
               退勤する
             </button>

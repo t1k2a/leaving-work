@@ -2,7 +2,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import { ErrorHandler } from '../../app/utility/ErrorHandler'
+import { ErrorHandler } from "../../app/utility/ErrorHandler";
 
 export default async (req: any, res: any) => {
   const now = new Date();
@@ -15,7 +15,8 @@ export default async (req: any, res: any) => {
     if (prependText) {
       text = text + "\n追加テキスト：\n" + prependText;
     }
-    await axios.post(
+
+    const lineResponse = await axios.post(
       "https://api.line.me/v2/bot/message/push",
       {
         to: process.env.ACCOUNT_ID,
@@ -33,24 +34,23 @@ export default async (req: any, res: any) => {
         },
       }
     );
-  res.send("退勤に成功しました");
+
+    // 現状ステータスしか使用していないが、汎用性を求めてdataも返す
+    return res.status(lineResponse.status).json(lineResponse.data);
   } catch (error: any) {
-    ErrorHandler.handleError(error, res)
+    ErrorHandler.handleError(error, res);
     return;
   }
 
   //TODO 下記処理は別ファイルに書き出したい
-  try {
-    await axios.post(
-      `${process.env.NGROK_URL}`,
-      text,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-  } catch (error: any) {
-    ErrorHandler.handleError(error, res)
-  }
+  // ngrokの使用用途をまとめて実装方針を決める（削除も視野）
+  // try {
+  //   await axios.post(`${process.env.NGROK_URL}`, text, {
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   });
+  // } catch (error: any) {
+  //   ErrorHandler.handleError(error, res);
+  // }
 };

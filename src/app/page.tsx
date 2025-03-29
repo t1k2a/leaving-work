@@ -1,7 +1,7 @@
-import checckoutStyles from "./checkout.module.css";
-import CurrentTime from "./currentTime";
-import SendCheckout from "./sendCheckout.client";
-import CheckoutWithText from "./checkoutWithText";
+import checckoutStyles from "./presentation/styles/checkout.module.css";
+import CurrentTime from "./presentation/components/currentTime";
+import SendCheckout from "./presentation/components/sendCheckout.client";
+import CheckoutWithText from "./presentation/components/checkoutWithText";
 
 export default function Home() {
   return (
