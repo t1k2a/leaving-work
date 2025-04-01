@@ -9,7 +9,15 @@ export default async (req: any, res: any) => {
   dayjs.extend(utc);
   dayjs.extend(timezone);
   const formatted = dayjs(now).tz("Asia/Tokyo").format("HH:mm");
-  let text = `${formatted}:退勤しました！`;
+    const userName = req.body.userName
+    let text = '';
+
+    if (userName) {
+      text = text + `${req.body.userName}が、`
+    }
+
+  text = text + `${formatted}:退勤しました！`;
+
   try {
     const prependText = req.body.text;
     if (prependText) {
