@@ -9,15 +9,28 @@ export default async (req: any, res: any) => {
   dayjs.extend(utc);
   dayjs.extend(timezone);
   const formatted = dayjs(now).tz("Asia/Tokyo").format("HH:mm");
-    const userName = req.body.userName
-    let text = '';
+  const userName = req.body.userName
+  let accountID;
+  let token;
+  let text = '';
 
-    if (userName) {
-      text = text + `${req.body.userName}が、`
+  if (userName) {
+    text = text + `${userName}が、`
+
+    if (userName === process.env.NEXT_PUBLIC_NAME1) {
+      accountID = process.env.ACCOUNT_ID;
+      token = process.env.LINE_ACCESS_TOKEN;
+    } else {
+      accountID = process.env.ACCOUNT_ID_FROM_A;
+      token = process.env.LINE_ACCESS_TOKEN_FROM_A;
     }
+    
+  } else {
+    accountID = process.env.ACCOUNT_ID
+  }
 
   text = text + `${formatted}:退勤しました！`;
-
+  
   try {
     const prependText = req.body.text;
     if (prependText) {
@@ -27,7 +40,7 @@ export default async (req: any, res: any) => {
     const lineResponse = await axios.post(
       "https://api.line.me/v2/bot/message/push",
       {
-        to: process.env.ACCOUNT_ID,
+        to: accountID,
         messages: [
           {
             type: "text",
@@ -38,7 +51,7 @@ export default async (req: any, res: any) => {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.LINE_ACCESS_TOKEN}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
