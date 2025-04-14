@@ -31,7 +31,7 @@ export default function ({ handleChange, userName}: UserRadioButtonsProps){
     };
 
     return (
-        <div style={marginBottom}>
+        <div id="userRadioButtons" style={marginBottom}>
         <label style={textStyle}>
           <input type="radio" name="user" value={name1} onChange={handleRadioChange} /> {name1}
         </label>

@@ -10,23 +10,12 @@ export default async (req: any, res: any) => {
   dayjs.extend(timezone);
   const formatted = dayjs(now).tz("Asia/Tokyo").format("HH:mm");
   const userName = req.body.userName
-  let accountID;
-  let token;
+  const accountID = process.env.ACCOUNT_ID;
+  const token = process.env.LINE_ACCESS_TOKEN;
   let text = '';
 
   if (userName) {
-    text = text + `${userName}が、`
-
-    if (userName === process.env.NEXT_PUBLIC_NAME1) {
-      accountID = process.env.ACCOUNT_ID;
-      token = process.env.LINE_ACCESS_TOKEN;
-    } else {
-      accountID = process.env.ACCOUNT_ID_FROM_A;
-      token = process.env.LINE_ACCESS_TOKEN_FROM_A;
-    }
-    
-  } else {
-    accountID = process.env.ACCOUNT_ID
+    text = `${userName}が、`
   }
 
   text = text + `${formatted}:退勤しました！`;
