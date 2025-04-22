@@ -9,7 +9,17 @@ export default async (req: any, res: any) => {
   dayjs.extend(utc);
   dayjs.extend(timezone);
   const formatted = dayjs(now).tz("Asia/Tokyo").format("HH:mm");
-  let text = `${formatted}:退勤しました！`;
+  const userName = req.body.userName
+  const groutTO = process.env.GROUP_TO;
+  const token = process.env.LINE_ACCESS_TOKEN;
+  let text = '';
+
+  if (userName) {
+    text = `${userName}が、`
+  }
+
+  text = text + `${formatted}:退勤しました！`;
+  
   try {
     const prependText = req.body.text;
     if (prependText) {
@@ -19,7 +29,7 @@ export default async (req: any, res: any) => {
     const lineResponse = await axios.post(
       "https://api.line.me/v2/bot/message/push",
       {
-        to: process.env.ACCOUNT_ID,
+        to: groutTO,
         messages: [
           {
             type: "text",
@@ -30,7 +40,7 @@ export default async (req: any, res: any) => {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.LINE_ACCESS_TOKEN}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );

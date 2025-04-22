@@ -5,6 +5,7 @@ import { sendCheckoutRequest } from "@/app/utility/callApi";
 import showAlertForCheckout from "@/app/utility/showAlertForCheckout";
 
 function CheckoutWithText() {
+  const [userName, setUserName] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
@@ -28,6 +29,15 @@ function CheckoutWithText() {
   }
 
   const openModal = function () {
+    const userRadioButtons = document.getElementById("userRadioButtons")
+    if (userRadioButtons != null) {
+      const radioButtonStyle = window.getComputedStyle(userRadioButtons);
+      if (radioButtonStyle.display === "none") {
+        userRadioButtons.style.display = "block";
+      } else {
+        userRadioButtons.style.display = "none";
+      }
+    }
     setIsOpen(!isOpen);
   };
 
@@ -36,8 +46,12 @@ function CheckoutWithText() {
   };
 
   const handleClickDOM = async () => {
-    const responseStatus = await sendCheckoutRequest(inputValue);
+    const responseStatus = await sendCheckoutRequest(inputValue, null);
     showAlertForCheckout(responseStatus, openModal)
+  };
+
+  const handleRadioChange = (userName: string | null) => {
+    setUserName(userName);
   };
 
   return (
@@ -56,6 +70,8 @@ function CheckoutWithText() {
               onTouchEnd={openModal}
             ></span>
           </div>
+          {/* テキストボタンを押したときに背景を消したい */}
+          {/* <UserRadioButtons handleChange={handleRadioChange} userName={userName}></UserRadioButtons> */}
           <div className={checkoutWithTextStyle.modalField}>
             <textarea
               name="text"
