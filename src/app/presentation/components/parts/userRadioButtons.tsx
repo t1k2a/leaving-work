@@ -5,7 +5,7 @@ interface UserRadioButtonsProps {
     userName: string|null;
 }
 
-export default function userRadioButtons({ handleChange, userName}: UserRadioButtonsProps){
+export default function UserRadioButtons({ handleChange, userName}: UserRadioButtonsProps){
     const [name1, setName1] = useState<string>("");
     const [name2, setName2] = useState<string>("");
     
