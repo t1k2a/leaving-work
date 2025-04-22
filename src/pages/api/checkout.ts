@@ -10,7 +10,7 @@ export default async (req: any, res: any) => {
   dayjs.extend(timezone);
   const formatted = dayjs(now).tz("Asia/Tokyo").format("HH:mm");
   const userName = req.body.userName
-  const accountID = process.env.ACCOUNT_ID;
+  const groutTO = process.env.GROUP_TO;
   const token = process.env.LINE_ACCESS_TOKEN;
   let text = '';
 
@@ -29,7 +29,7 @@ export default async (req: any, res: any) => {
     const lineResponse = await axios.post(
       "https://api.line.me/v2/bot/message/push",
       {
-        to: accountID,
+        to: groutTO,
         messages: [
           {
             type: "text",
