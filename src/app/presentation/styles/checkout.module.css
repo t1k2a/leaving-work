@@ -26,7 +26,20 @@
   cursor: pointer;
   width: 500px;
   height: 500px;
+  animation: pulse 2s infinite;
 }
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+} 
 
 @media (max-width: 600px) {
   .checkoutButton {
@@ -40,80 +53,9 @@
   font-size: large;
 }
 
-/*== 無限に波紋が広がる */
 
-.checkoutButton {
-  /*波紋の基点とするためrelativeを指定*/
-  position: relative;
-  /*波紋の形状*/
-  display: inline-block;
-  border-radius: 50%;
-  outline: none;
-  /*アニメーションの設定*/
-  transition: all 0.3s;
-}
 
-/*波形を2つ設定*/
-.checkoutButton::after,
-.checkoutButton::before {
-  content: "";
-  /*絶対配置で波形の位置を決める*/
-  position: absolute;
-  left: -25%;
-  top: -25%;
-  /*波形の形状*/
-  border: 1px solid #3b4b34;
-  width: 150%;
-  height: 150%;
-  border-radius: 50%;
-  /*はじめは不透明*/
-  opacity: 1;
-  /*ループするアニメーションの設定*/
-  animation: 1s circleanime linear infinite;
-}
 
-/*波形の2つ目は0.5秒遅らせてアニメーション*/
-.checkoutButton::before {
-  animation-delay: 0.5s;
-}
-
-/*波形のアニメーション*/
-@keyframes circleanime {
-  0% {
-    transform: scale(0.68);
-  }
-  100% {
-    transform: scale(1.2);
-    opacity: 0;
-  }
-}
-
-/*中央矢印*/
-.checkoutButton span::after {
-  content: "";
-  /*絶対配置で矢印の位置を決める*/
-  position: absolute;
-  top: 38%;
-  left: 45%;
-  /*矢印の形状*/
-  border: 14px solid transparent;
-  border-top-width: 10px;
-  border-bottom-width: 10px;
-  border-left-color: #fff;
-}
-
-/* デバイスの幅が600px以下の場合 */
-@media (max-width: 600px) {
-  .checkoutButton,
-  #current-time {
-    font-size: 12px; /* スマートフォンなど小さなデバイス用のフォントサイズ */
-  }
-}
-
-/* デバイスの幅が601px以上の場合 */
-@media (min-width: 601px) {
-  .checkoutButton,
-  #current-time {
-    font-size: 18px; /* タブレットやデスクトップ用のフォントサイズ */
-  }
+.checkoutButton > * {
+  pointer-events: auto;
 }
