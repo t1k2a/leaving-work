@@ -12,8 +12,8 @@ export default async (req: any, res: any) => {
   const userName = req.body.userName;
   const isDev = process.env.NODE_ENV === 'development';
   const config = {
-    LINE_MESSAGE_PUSH_URL : process.env.LINE_MESSAGE_PUSH_URL ?? '',
-    token : isDev ? process.env.LINE_ACCESS_TOKEN_DEV : process.env.LINE_ACCESS_TOKEN,
+    lineMessagePushUrl : process.env.LINE_MESSAGE_PUSH_URL ?? '',
+    lineAccessToken : isDev ? process.env.LINE_ACCESS_TOKEN_DEV : process.env.LINE_ACCESS_TOKEN,
     messageTO : isDev ? process.env.ACCOUNT_ID_DEV : process.env.GROUP_TO
   }
 
@@ -32,7 +32,7 @@ export default async (req: any, res: any) => {
     }
 
     const lineResponse = await axios.post(
-      config.LINE_MESSAGE_PUSH_URL,
+      config.lineMessagePushUrl,
       {
         to: config.messageTO,
         messages: [
@@ -45,7 +45,7 @@ export default async (req: any, res: any) => {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${config.token}`,
+          Authorization: `Bearer ${config.lineAccessToken}`,
         },
       }
     );
