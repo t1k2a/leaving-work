@@ -10,10 +10,13 @@ export default async (req: any, res: any) => {
   dayjs.extend(timezone);
   const formatted = dayjs(now).tz("Asia/Tokyo").format("HH:mm");
   const userName = req.body.userName;
-  const LINE_MESSAGE_PUSH_URL = process.env.LINE_MESSAGE_PUSH_URL ?? '';
   const isDev = process.env.NODE_ENV === 'development';
-  const token = isDev ? process.env.LINE_ACCESS_TOKEN_DEV : process.env.LINE_ACCESS_TOKEN;
-  const messageTO = isDev ? process.env.ACCOUNT_ID_DEV : process.env.GROUP_TO;
+  const config = {
+    LINE_MESSAGE_PUSH_URL : process.env.LINE_MESSAGE_PUSH_URL ?? '',
+    token : isDev ? process.env.LINE_ACCESS_TOKEN_DEV : process.env.LINE_ACCESS_TOKEN,
+    messageTO : isDev ? process.env.ACCOUNT_ID_DEV : process.env.GROUP_TO
+  }
+
   let text = '';
   
   if (userName) {
@@ -29,9 +32,9 @@ export default async (req: any, res: any) => {
     }
 
     const lineResponse = await axios.post(
-      LINE_MESSAGE_PUSH_URL,
+      config.LINE_MESSAGE_PUSH_URL,
       {
-        to: messageTO,
+        to: config.messageTO,
         messages: [
           {
             type: "text",
@@ -42,7 +45,7 @@ export default async (req: any, res: any) => {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${config.token}`,
         },
       }
     );
