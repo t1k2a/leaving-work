@@ -13,8 +13,8 @@ function CheckoutWithText() {
     return;
   }
 
-  const main = document.getElementById("main");
-  const checkout = document.getElementById("checkout");
+  const main: HTMLElement | null = document.getElementById("main");
+  const checkout: HTMLElement | null = document.getElementById("checkout");
 
   if (main == undefined || checkout == undefined) {
     return;
@@ -28,7 +28,7 @@ function CheckoutWithText() {
     checkout.style.opacity = "1";
   }
 
-  const openModal = function () {
+  const openModal: React.MouseEventHandler<HTMLDivElement> = function () {
     const userRadioButtons = document.getElementById("userRadioButtons")
     if (userRadioButtons != null) {
       const radioButtonStyle = window.getComputedStyle(userRadioButtons);
