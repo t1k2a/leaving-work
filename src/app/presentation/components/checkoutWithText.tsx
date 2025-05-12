@@ -28,7 +28,7 @@ function CheckoutWithText() {
     checkout.style.opacity = "1";
   }
 
-  const openModal: React.MouseEventHandler<HTMLDivElement> = function () {
+  const openModal = (): void => {
     const userRadioButtons = document.getElementById("userRadioButtons")
     if (userRadioButtons != null) {
       const radioButtonStyle = window.getComputedStyle(userRadioButtons);
