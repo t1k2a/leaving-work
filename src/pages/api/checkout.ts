@@ -61,16 +61,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   if (!config.messageTO) {
-    console.error("LINE message destination (messageTO) is not configured.");
-    return res.status(500).json({ error: "LINE destination not configured." })
+    return res.status(500).json({ error:  "LINEメッセージの宛先が設定されていません"})
   }
   if (!config.lineAccessToken) {
-    console.error("LINE Access Token is not configured.")
-    return res.status(500).json({ error: "LINE Access Token is not configured." })
+    return res.status(500).json({ error: "LINEアクセストークンが設定されていません" })
   }
   if (!config.lineMessagePushUrl) {
-    console.error("LINE Message Push URL is not configured.");
-    return res.status(500).json({ error: "LINE Message Push URL is not configured."})
+    return res.status(500).json({ error: "LINEメッセージプッシュURLが設定されていません"})
   }
 
   let text: string = '';
