@@ -1,4 +1,4 @@
-export async function sendCheckoutRequest(inputValue: string | null, userName: string | null) {
+export async function sendCheckoutRequest(inputValue: string | null, userName: string | null): Promise<number> {
     try {
         const response = await fetch('/api/checkout', {
             method: "POST",
@@ -9,7 +9,7 @@ export async function sendCheckoutRequest(inputValue: string | null, userName: s
         });
 
         return response.status;
-    } catch (error: any) {
+    } catch (error: unknown) {
         throw new Error("退勤の際にエラーが発生しました");
     }
  }

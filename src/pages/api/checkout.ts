@@ -1,47 +1,101 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { ErrorHandler } from "../../app/utility/ErrorHandler";
+import { NextApiRequest, NextApiResponse } from "next";
 
-export default async (req: any, res: any) => {
+interface CheckoutRequestBody {
+  userName?: string;
+  text?: string;
+}
+
+interface LineApiSuccessResponse {
+  status: number;
+  data: LinePushApiResponse[];
+}
+
+interface LinePushApiResponse {
+  sentMessages: LineSentMessageInfo[];
+}
+
+
+interface LineSentMessageInfo {
+  id: string;
+  quoteToken: string;
+}
+
+interface LineTextMessage {
+  type: "text";
+  text: string;
+}
+
+interface ApiConfig {
+  lineMessagePushUrl: string;
+  lineAccessToken: string | undefined;
+  messageTO: string | undefined;
+}
+
+interface LinePushPayload {
+  to: string | undefined;
+  messages: LineTextMessage[];
+}
+
+function formattedNow(): string {
   const now = new Date();
   dayjs.extend(utc);
   dayjs.extend(timezone);
-  const formatted = dayjs(now).tz("Asia/Tokyo").format("HH:mm");
-  const userName = req.body.userName;
-  const isDev = process.env.NODE_ENV === 'development';
-  const config = {
+  return dayjs(now).tz("Asia/Tokyo").format("HH:mm");
+}
+
+export default async (req: NextApiRequest, res: NextApiResponse) => {
+  const requestBody = req.body as CheckoutRequestBody;
+  const userName = requestBody.userName;
+  const prependText = requestBody.text;
+
+  const isDev: boolean = process.env.NODE_ENV === 'development';
+  const config: ApiConfig = {
     lineMessagePushUrl : process.env.LINE_MESSAGE_PUSH_URL ?? '',
     lineAccessToken : isDev ? process.env.LINE_ACCESS_TOKEN_DEV : process.env.LINE_ACCESS_TOKEN,
     messageTO : isDev ? process.env.ACCOUNT_ID_DEV : process.env.GROUP_TO
   }
 
-  let text = '';
+  if (!config.messageTO) {
+    return res.status(500).json({ error:  "LINEメッセージの宛先が設定されていません"})
+  }
+  if (!config.lineAccessToken) {
+    return res.status(500).json({ error: "LINEアクセストークンが設定されていません" })
+  }
+  if (!config.lineMessagePushUrl) {
+    return res.status(500).json({ error: "LINEメッセージプッシュURLが設定されていません"})
+  }
+
+  let text: string = '';
   
   if (userName) {
     text = `${userName}が、`
   }
 
-  text = text + `${formatted}:退勤しました！`;
-  
-  try {
-    const prependText = req.body.text;
-    if (prependText) {
-      text = text + "\n追加テキスト：\n" + prependText;
-    }
+  text = text + `${formattedNow()}:退勤しました！`;
 
-    const lineResponse = await axios.post(
-      config.lineMessagePushUrl,
+  if (prependText) {
+    text = text + "\n追加テキスト：\n" + prependText;
+  }
+
+  const linePayload: LinePushPayload = {
+    to: config.messageTO,
+    messages: [
       {
-        to: config.messageTO,
-        messages: [
-          {
-            type: "text",
-            text: text,
-          },
-        ],
+        type: "text",
+        text: text,
       },
+    ],
+  };
+
+  try {
+    const lineResponse: AxiosResponse<LineApiSuccessResponse> = await axios.post(
+      config.lineMessagePushUrl,
+      linePayload,
       {
         headers: {
           "Content-Type": "application/json",
