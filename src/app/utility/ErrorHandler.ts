@@ -19,10 +19,6 @@ export class ErrorHandler {
          console.error("Unknown error:", error)
       }
 
-      if (res !== undefined) {
-         res.status(500).send(error);
-      }
-
       if (res) {
          const responseBody = {
             message: 'サーバー内部でエラーが発生しました。'
