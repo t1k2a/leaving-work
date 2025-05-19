@@ -49,7 +49,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const prependText = requestBody.text;
   const isDev: boolean = process.env.NODE_ENV === 'development';
   const isStaging: boolean = process.env.VERCEL_ENV === 'preview';
-  const isProd: boolean = process.env.VERCEL_ENV === 'production';
   let lineAccessToken = '';
   let messageTO = '';
   const lineMessagePushUrl: string =  process.env.LINE_MESSAGE_PUSH_URL ?? ''
@@ -60,7 +59,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   } else if (isStaging) {
     lineAccessToken = process.env.LINE_ACCESS_TOKEN_STG ?? '';
     messageTO = process.env.ACCOUNT_ID_STG ?? '';
-  } else if(isProd) {
+  } else {
     lineAccessToken = process.env.LINE_ACCESS_TOKEN ?? '';
     messageTO = process.env.GROUP_TO ?? ''
   }
