@@ -48,8 +48,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const userName = requestBody.userName;
   const prependText = requestBody.text;
   const isDev: boolean = process.env.NODE_ENV === 'development';
-  const isStaging: boolean = process.env.VERCEL_GIT_BRANCH === 'development';
-  const isProd: boolean = process.env.VERCEL_GIT_BRANCH === 'main';
+  const isStaging: boolean = process.env.VERCEL_ENV === 'preview';
+  const isProd: boolean = process.env.VERCEL_ENV === 'production';
   let lineAccessToken = '';
   let messageTO = '';
   const lineMessagePushUrl: string =  process.env.LINE_MESSAGE_PUSH_URL ?? ''
