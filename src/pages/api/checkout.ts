@@ -30,11 +30,6 @@ interface LineTextMessage {
   text: string;
 }
 
-interface ApiConfig {
-  lineMessagePushUrl: string;
-  lineAccessToken: string | undefined;
-  messageTO: string | undefined;
-}
 
 interface LinePushPayload {
   to: string | undefined;
@@ -52,21 +47,31 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const requestBody = req.body as CheckoutRequestBody;
   const userName = requestBody.userName;
   const prependText = requestBody.text;
-
   const isDev: boolean = process.env.NODE_ENV === 'development';
-  const config: ApiConfig = {
-    lineMessagePushUrl : process.env.LINE_MESSAGE_PUSH_URL ?? '',
-    lineAccessToken : isDev ? process.env.LINE_ACCESS_TOKEN_DEV : process.env.LINE_ACCESS_TOKEN,
-    messageTO : isDev ? process.env.ACCOUNT_ID_DEV : process.env.GROUP_TO
+  const isStaging: boolean = process.env.VERCEL_ENV === 'staging' && process.env.VERCEL_GIT_BRANCH === 'development';
+
+  let lineAccessToken = '';
+  let messageTO = '';
+  const lineMessagePushUrl: string =  process.env.LINE_MESSAGE_PUSH_URL ?? ''
+
+  if (isDev) {
+    lineAccessToken = process.env.LINE_ACCESS_TOKEN_DEV ?? '';
+    messageTO = process.env.ACCOUNT_ID_DEV ?? '';
+  } else if (isStaging) {
+    lineAccessToken = process.env.LINE_ACCESS_TOKEN_STG ?? '';
+    messageTO = process.env.ACCOUNT_ID_STG ?? '';
+  } else {
+    lineAccessToken = process.env.LINE_ACCESS_TOKEN ?? '';
+    messageTO = process.env.GROUP_TO ?? ''
   }
 
-  if (!config.messageTO) {
+  if (!messageTO) {
     return res.status(500).json({ error:  "LINEメッセージの宛先が設定されていません"})
   }
-  if (!config.lineAccessToken) {
+  if (!lineAccessToken) {
     return res.status(500).json({ error: "LINEアクセストークンが設定されていません" })
   }
-  if (!config.lineMessagePushUrl) {
+  if (!lineMessagePushUrl) {
     return res.status(500).json({ error: "LINEメッセージプッシュURLが設定されていません"})
   }
 
@@ -83,7 +88,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const linePayload: LinePushPayload = {
-    to: config.messageTO,
+    to: messageTO,
     messages: [
       {
         type: "text",
@@ -94,12 +99,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     const lineResponse: AxiosResponse<LineApiSuccessResponse> = await axios.post(
-      config.lineMessagePushUrl,
+      lineMessagePushUrl,
       linePayload,
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${config.lineAccessToken}`,
+          Authorization: `Bearer ${lineAccessToken}`,
         },
       }
     );
