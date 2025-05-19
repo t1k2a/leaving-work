@@ -48,8 +48,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const userName = requestBody.userName;
   const prependText = requestBody.text;
   const isDev: boolean = process.env.NODE_ENV === 'development';
-  const isStaging: boolean = process.env.VERCEL_ENV === 'staging' && process.env.VERCEL_GIT_BRANCH === 'development';
-
+  const isStaging: boolean = process.env.VERCEL_GIT_BRANCH === 'development';
+  const isProd: boolean = process.env.VERCEL_GIT_BRANCH === 'main';
   let lineAccessToken = '';
   let messageTO = '';
   const lineMessagePushUrl: string =  process.env.LINE_MESSAGE_PUSH_URL ?? ''
@@ -60,7 +60,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   } else if (isStaging) {
     lineAccessToken = process.env.LINE_ACCESS_TOKEN_STG ?? '';
     messageTO = process.env.ACCOUNT_ID_STG ?? '';
-  } else {
+  } else if(isProd) {
     lineAccessToken = process.env.LINE_ACCESS_TOKEN ?? '';
     messageTO = process.env.GROUP_TO ?? ''
   }
