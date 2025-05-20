@@ -2,17 +2,17 @@
 import checckoutStyles from "../styles/checkout.module.css";
 import { sendCheckoutRequest } from "@/app/utility/callApi";
 import showAlertForCheckout from "@/app/utility/showAlertForCheckout";
-import { useState } from "react";
+import React, { useState } from "react";
 import UserRadioButtons from "./parts/userRadioButtons";
 
 function SendCheckout() {
   const [userName, setUserName] = useState<string | null>(null);
-  const handleClick = async function () {
-    const responseStatus = await sendCheckoutRequest(null, userName);
+  const handleClick: React.TouchEventHandler<HTMLButtonElement> = async function () {
+    const responseStatus: number = await sendCheckoutRequest(null, userName);
     showAlertForCheckout(responseStatus)
   };
 
-  const handleRadioChange = (userName: string | null) => {
+  const handleRadioChange = (userName: string | null): void => {
     setUserName(userName);
   };
 

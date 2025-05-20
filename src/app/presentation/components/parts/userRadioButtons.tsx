@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface UserRadioButtonsProps {
     handleChange: (userName: string|null) => void;
     userName: string|null;
 }
 
-export default function UserRadioButtons({ handleChange, userName}: UserRadioButtonsProps){
+export default function UserRadioButtons({ handleChange, userName}: UserRadioButtonsProps): JSX.Element {
     const [name1, setName1] = useState<string>("");
     const [name2, setName2] = useState<string>("");
     
@@ -14,19 +14,19 @@ export default function UserRadioButtons({ handleChange, userName}: UserRadioBut
         setName2(process.env.NEXT_PUBLIC_NAME2 || "");
       }, []);
 
-    const handleRadioChange  = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const userName = event.target.value;
+    const handleRadioChange  = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const userName: string = event.target.value;
         handleChange(userName);
     };
 
-    const textStyle = {
+    const textStyle: React.CSSProperties = {
     fontSize: '12px',
     color: 'black',
     padding: '10px',
     marginBottom: '30px',
     };
     
-    const marginBottom = {
+    const marginBottom: React.CSSProperties = {
     marginBottom: '50px',
     };
 
