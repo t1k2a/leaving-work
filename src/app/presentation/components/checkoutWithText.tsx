@@ -3,6 +3,7 @@ import { useState } from "react";
 import checkoutWithTextStyle from "../styles/checkoutWithText.module.css";
 import { sendCheckoutRequest } from "@/app/utility/callApi";
 import showAlertForCheckout from "@/app/utility/showAlertForCheckout";
+import UserRadioButtons from "./parts/userRadioButtons";
 
 function CheckoutWithText() {
   const [userName, setUserName] = useState<string | null>(null);
@@ -46,7 +47,7 @@ function CheckoutWithText() {
   };
 
   const handleClickDOM = async () => {
-    const responseStatus = await sendCheckoutRequest(inputValue, null);
+    const responseStatus = await sendCheckoutRequest(inputValue, userName);
     showAlertForCheckout(responseStatus, openModal)
   };
 
@@ -70,8 +71,7 @@ function CheckoutWithText() {
               onTouchEnd={openModal}
             ></span>
           </div>
-          {/* テキストボタンを押したときに背景を消したい */}
-          {/* <UserRadioButtons handleChange={handleRadioChange} userName={userName}></UserRadioButtons> */}
+          <UserRadioButtons handleChange={handleRadioChange} userName={userName}></UserRadioButtons>
           <div className={checkoutWithTextStyle.modalField}>
             <textarea
               name="text"
