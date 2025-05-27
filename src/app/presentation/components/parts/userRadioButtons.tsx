@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 
 interface UserRadioButtonsProps {
-    handleChange: (userName: string|null) => void;
-    userName: string|null;
+    handleChange: (userName: string) => void;
 }
 
-export default function UserRadioButtons({ handleChange, userName}: UserRadioButtonsProps): JSX.Element {
+export default function UserRadioButtons({ handleChange}: UserRadioButtonsProps): JSX.Element {
     const [name1, setName1] = useState<string>("");
     const [name2, setName2] = useState<string>("");
     
@@ -31,13 +30,17 @@ export default function UserRadioButtons({ handleChange, userName}: UserRadioBut
     };
 
     return (
-        <div id="userRadioButtons" style={marginBottom}>
-        <label style={textStyle}>
-          <input type="radio" name="user" value={name1} onChange={handleRadioChange} /> {name1}
-        </label>
-        <label style={textStyle}>
-          <input type="radio" name="user" value={name2} onChange={handleRadioChange} /> {name2}
-        </label>
+      <div id="userRadioButtons" style={marginBottom}>
+        {name1 && (
+          <label style={textStyle}>
+            <input type="radio" name="user" value={name1} onChange={handleRadioChange} /> {name1}
+          </label>
+        )}
+        {name2 && (
+          <label style={textStyle}>
+              <input type="radio" name="user" value={name2} onChange={handleRadioChange} /> {name2}
+            </label>
+        )}
       </div>
     )
 }

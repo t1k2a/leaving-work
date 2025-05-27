@@ -3,9 +3,10 @@ import { useState } from "react";
 import checkoutWithTextStyle from "../styles/checkoutWithText.module.css";
 import { sendCheckoutRequest } from "@/app/utility/callApi";
 import showAlertForCheckout from "@/app/utility/showAlertForCheckout";
+import UserRadioButtons from "./parts/userRadioButtons";
 
 function CheckoutWithText() {
-  const [userName, setUserName] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
@@ -23,9 +24,11 @@ function CheckoutWithText() {
   if (isOpen) {
     main.style.background = "gray";
     checkout.style.opacity = "0.5";
+    checkout.style.pointerEvents = "none";
   } else {
     main.style.background = "rgb(214, 219, 220)";
     checkout.style.opacity = "1";
+    checkout.style.pointerEvents = "auto";
   }
 
   const openModal = (): void => {
@@ -46,11 +49,11 @@ function CheckoutWithText() {
   };
 
   const handleClickDOM = async () => {
-    const responseStatus = await sendCheckoutRequest(inputValue, null);
+    const responseStatus = await sendCheckoutRequest(inputValue, userName);
     showAlertForCheckout(responseStatus, openModal)
   };
 
-  const handleRadioChange = (userName: string | null) => {
+  const handleRadioChange = (userName: string) => {
     setUserName(userName);
   };
 
@@ -70,8 +73,7 @@ function CheckoutWithText() {
               onTouchEnd={openModal}
             ></span>
           </div>
-          {/* テキストボタンを押したときに背景を消したい */}
-          {/* <UserRadioButtons handleChange={handleRadioChange} userName={userName}></UserRadioButtons> */}
+            <UserRadioButtons handleChange={handleRadioChange}></UserRadioButtons>
           <div className={checkoutWithTextStyle.modalField}>
             <textarea
               name="text"
