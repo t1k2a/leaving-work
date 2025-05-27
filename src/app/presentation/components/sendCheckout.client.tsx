@@ -11,14 +11,13 @@ function SendCheckout() {
     const responseStatus: number = await sendCheckoutRequest(null, userName);
     showAlertForCheckout(responseStatus)
   };
-
-  const handleRadioChange = (userName: string | null): void => {
+  const handleRadioChange = (userName: string): void => {
     setUserName(userName);
   };
 
   return (
     <div>
-      <UserRadioButtons handleChange={handleRadioChange} userName={userName}></UserRadioButtons>
+      <UserRadioButtons handleChange={handleRadioChange}></UserRadioButtons>
         <button
       className={checckoutStyles.checkoutButton}
       id="checkout"
