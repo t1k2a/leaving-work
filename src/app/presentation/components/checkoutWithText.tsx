@@ -6,7 +6,7 @@ import showAlertForCheckout from "@/app/utility/showAlertForCheckout";
 import UserRadioButtons from "./parts/userRadioButtons";
 
 function CheckoutWithText() {
-  const [userName, setUserName] = useState<string>("");
+  const [userName, setUserName] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
@@ -73,7 +73,10 @@ function CheckoutWithText() {
               onTouchEnd={openModal}
             ></span>
           </div>
-            <UserRadioButtons handleChange={handleRadioChange}></UserRadioButtons>
+            <UserRadioButtons 
+              handleChange={handleRadioChange}
+              selectedValue={userName}
+            ></UserRadioButtons>
           <div className={checkoutWithTextStyle.modalField}>
             <textarea
               name="text"
