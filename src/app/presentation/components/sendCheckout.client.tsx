@@ -17,7 +17,10 @@ function SendCheckout() {
 
   return (
     <div>
-      <UserRadioButtons handleChange={handleRadioChange}></UserRadioButtons>
+      <UserRadioButtons 
+        handleChange={handleRadioChange}
+        selectedValue={userName}
+      ></UserRadioButtons>
         <button
       className={checckoutStyles.checkoutButton}
       id="checkout"
