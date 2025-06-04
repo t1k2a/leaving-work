@@ -41,6 +41,11 @@ function CheckoutWithText() {
         userRadioButtons.style.display = "none";
       }
     }
+    
+    if (isOpen) {
+      setInputValue("");
+    }
+    
     setIsOpen(!isOpen);
   };
 
@@ -83,15 +88,14 @@ function CheckoutWithText() {
               className={checkoutWithTextStyle.modalTextArea}
               onChange={handleChange}
             ></textarea>
-            {/* 後続にて実装 */}
-            {/* {inputValue && (
+            {inputValue && (
               <div className={checkoutWithTextStyle.modalPreview}>
-                <p>プレビュー：</p>
-                <CurrentTime />
-                <br></br>
-                <p>{inputValue}</p>
+                <p className={checkoutWithTextStyle.previewTitle}>↓ プレビュー</p>
+                <p className={checkoutWithTextStyle.previewMessage}>{userName || ""}が、{new Date().toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" })}:退勤しました！</p>
+                <p className={checkoutWithTextStyle.previewLabel}>追加テキスト：</p>
+                <p className={checkoutWithTextStyle.previewLabel}>{inputValue}</p>
               </div>
-            )} */}
+            )}
 
             <button
               className={checkoutWithTextStyle.squareButton}
