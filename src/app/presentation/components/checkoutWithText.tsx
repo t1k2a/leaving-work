@@ -91,9 +91,9 @@ function CheckoutWithText() {
             {inputValue && (
               <div className={checkoutWithTextStyle.modalPreview}>
                 <p className={checkoutWithTextStyle.previewTitle}>↓ プレビュー</p>
-                <p className={checkoutWithTextStyle.previewMessage}>{userName || ""}が、{new Date().toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" })}:退勤しました！</p>
-                <p className={checkoutWithTextStyle.previewLabel}>追加テキスト：</p>
-                <p className={checkoutWithTextStyle.previewLabel}>{inputValue}</p>
+                <p className={checkoutWithTextStyle.previewMessage}>{userName? userName + "が、" : ""}{new Date().toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" })}:退勤しました！</p>
+                <p className={checkoutWithTextStyle.previewText}>追加テキスト：</p>
+                <p className={checkoutWithTextStyle.previewText}>{inputValue}</p>
               </div>
             )}
 

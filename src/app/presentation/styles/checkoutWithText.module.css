@@ -116,21 +116,9 @@
   line-height: 1.4;
 }
 
-.previewLabel {
+.previewText {
   font-weight: bold;
   color: #333;
   margin-bottom: 5px;
   font-size: 14px;
-}
-
-.previewText {
-  color: #555;
-  background: white;
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #eee;
-  margin: 0;
-  white-space: pre-wrap;
-  font-size: 14px;
-  line-height: 1.5;
 }
