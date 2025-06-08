@@ -9,7 +9,8 @@ function CheckoutWithText() {
   const [userName, setUserName] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
-
+  const [preViewTime, setPreviewTime] = useState<string | null>(null);
+  
   if (typeof document == "undefined") {
     return;
   }
@@ -44,6 +45,10 @@ function CheckoutWithText() {
     
     if (isOpen) {
       setInputValue("");
+    }
+
+    if (!isOpen) {
+      setPreviewTime(new Date().toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" }));
     }
     
     setIsOpen(!isOpen);
@@ -91,7 +96,7 @@ function CheckoutWithText() {
             {inputValue && (
               <div className={checkoutWithTextStyle.modalPreview}>
                 <p className={checkoutWithTextStyle.previewTitle}>↓ プレビュー</p>
-                <p className={checkoutWithTextStyle.previewMessage}>{userName? userName + "が、" : ""}{new Date().toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" })}:退勤しました！</p>
+                <p className={checkoutWithTextStyle.previewMessage}>{userName? userName + "が、" : ""}{preViewTime}:退勤しました！</p>
                 <p className={checkoutWithTextStyle.previewText}>追加テキスト：</p>
                 <p className={checkoutWithTextStyle.previewText}>{inputValue}</p>
               </div>
