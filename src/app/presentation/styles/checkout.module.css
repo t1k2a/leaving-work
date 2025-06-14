@@ -53,9 +53,13 @@
   font-size: large;
 }
 
-
-
-
 .checkoutButton > * {
   pointer-events: auto;
+}
+
+/* 無効化状態用 */
+.disabled {
+  opacity: 0.3;
+  pointer-events: none;
+  cursor: not-allowed;
 }

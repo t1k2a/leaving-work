@@ -5,42 +5,32 @@ import { sendCheckoutRequest } from "@/app/utility/callApi";
 import showAlertForCheckout from "@/app/utility/showAlertForCheckout";
 import UserRadioButtons from "./parts/userRadioButtons";
 
-function CheckoutWithText() {
+interface CheckoutWithTextProps {
+  onModalOpen?: () => void;
+  onModalClose?: () => void;
+}
+
+function CheckoutWithText({ onModalOpen, onModalClose }: CheckoutWithTextProps) {
   const [userName, setUserName] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const [preViewTime, setPreviewTime] = useState<string | null>(null);
+  const [showUserRadioButtons, setShowUserRadioButtons] = useState(false);
 
-  if (typeof document == "undefined") {
-    return;
-  }
-
-  const main: HTMLElement | null = document.getElementById("main");
-  const checkout: HTMLElement | null = document.getElementById("checkout");
-
-  if (main == undefined || checkout == undefined) {
-    return;
-  }
-
-  if (isOpen) {
-    main.style.background = "gray";
-    checkout.style.opacity = "0.5";
-    checkout.style.pointerEvents = "none";
-  } else {
-    main.style.background = "rgb(214, 219, 220)";
-    checkout.style.opacity = "1";
-    checkout.style.pointerEvents = "auto";
-  }
 
   const openModal = (): void => {
-    const userRadioButtons = document.getElementById("userRadioButtons")
-    if (userRadioButtons != null) {
-      const radioButtonStyle = window.getComputedStyle(userRadioButtons);
-      if (radioButtonStyle.display === "none") {
-        userRadioButtons.style.display = "block";
-      } else {
-        userRadioButtons.style.display = "none";
-      }
+    setShowUserRadioButtons(!showUserRadioButtons);
+    
+    if (isOpen) {
+      setInputValue("");
+      // モーダルが閉じるとき
+      onModalClose?.();
+    } else {
+      // モーダルが開くとき
+      onModalOpen?.();
+      setPreviewTime(new Date().toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" }));
     }
+
     setIsOpen(!isOpen);
   };
 
@@ -59,8 +49,10 @@ function CheckoutWithText() {
 
   return (
     <>
+    {/* 背景のオーバーレイを条件付きレンダリング */}
+    {isOpen && <div className={checkoutWithTextStyle.overlay}></div>}    
       <div
-        className={checkoutWithTextStyle.square}
+        className={`${checkoutWithTextStyle.square} ${isOpen ? checkoutWithTextStyle.disabled : ""}`}
         onTouchEnd={isOpen ? undefined : openModal}
       >
         <p className={checkoutWithTextStyle.text}>テキストをつけて退勤</p>
@@ -73,25 +65,26 @@ function CheckoutWithText() {
               onTouchEnd={openModal}
             ></span>
           </div>
+          {showUserRadioButtons && (
             <UserRadioButtons 
               handleChange={handleRadioChange}
               selectedValue={userName}
             ></UserRadioButtons>
+          )}
           <div className={checkoutWithTextStyle.modalField}>
             <textarea
               name="text"
               className={checkoutWithTextStyle.modalTextArea}
               onChange={handleChange}
             ></textarea>
-            {/* 後続にて実装 */}
-            {/* {inputValue && (
+            {inputValue && (
               <div className={checkoutWithTextStyle.modalPreview}>
-                <p>プレビュー：</p>
-                <CurrentTime />
-                <br></br>
-                <p>{inputValue}</p>
+                <p className={checkoutWithTextStyle.previewTitle}>↓ プレビュー</p>
+                <p className={checkoutWithTextStyle.previewMessage}>{userName? userName + "が、" : ""}{preViewTime}:退勤しました！</p>
+                <p className={checkoutWithTextStyle.previewText}>追加テキスト：</p>
+                <p className={checkoutWithTextStyle.previewText}>{inputValue}</p>
               </div>
-            )} */}
+            )}
 
             <button
               className={checkoutWithTextStyle.squareButton}
