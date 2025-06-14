@@ -5,7 +5,11 @@ import showAlertForCheckout from "@/app/utility/showAlertForCheckout";
 import React, { useState } from "react";
 import UserRadioButtons from "./parts/userRadioButtons";
 
-function SendCheckout() {
+interface SendCheckoutProps {
+  hideUserRadioButtons?: boolean;
+}
+
+function SendCheckout({ hideUserRadioButtons = false }: SendCheckoutProps) {
   const [userName, setUserName] = useState<string | null>(null);
   const handleClick: React.TouchEventHandler<HTMLButtonElement> = async function () {
     const responseStatus: number = await sendCheckoutRequest(null, userName);
@@ -17,12 +21,18 @@ function SendCheckout() {
 
   return (
     <div>
-      <UserRadioButtons handleChange={handleRadioChange}></UserRadioButtons>
+      {/* 条件付きでUserRadioButtonsを表示 */}
+      {!hideUserRadioButtons && (
+      <UserRadioButtons 
+        handleChange={handleRadioChange}
+        selectedValue={userName}
+      ></UserRadioButtons>
+      )}
         <button
-      className={checckoutStyles.checkoutButton}
+      className={`${checckoutStyles.checkoutButton} ${hideUserRadioButtons ? checckoutStyles.disabled : ''}`}
       id="checkout"
-      onTouchEnd={handleClick}
-      disabled
+      onTouchEnd={hideUserRadioButtons ? undefined : handleClick}
+      disabled={hideUserRadioButtons}
     >
       退勤する
     </button>
