@@ -115,15 +115,4 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return;
   }
 
-  //TODO 下記処理は別ファイルに書き出したい
-  // ngrokの使用用途をまとめて実装方針を決める（削除も視野）
-  // try {
-  //   await axios.post(`${process.env.NGROK_URL}`, text, {
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   });
-  // } catch (error: any) {
-  //   ErrorHandler.handleError(error, res);
-  // }
 };
