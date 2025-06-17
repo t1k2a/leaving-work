@@ -11,13 +11,23 @@ interface SendCheckoutProps {
 
 function SendCheckout({ hideUserRadioButtons = false }: SendCheckoutProps) {
   const [userName, setUserName] = useState<string | null>(null);
+  const [isTemporarilyDisabled, setIsTemporarilyDisabled] = useState(false);
   const handleClick: React.TouchEventHandler<HTMLButtonElement> = async function () {
+    // ボタンを一時的に無効化
+    setIsTemporarilyDisabled(true);
+
     const responseStatus: number = await sendCheckoutRequest(null, userName);
     showAlertForCheckout(responseStatus)
+
+    setTimeout(() => {
+      setIsTemporarilyDisabled(false);
+    }, 500)
   };
   const handleRadioChange = (userName: string): void => {
     setUserName(userName);
   };
+
+  const isButtonDisabled = hideUserRadioButtons || isTemporarilyDisabled;
 
   return (
     <div>
@@ -29,10 +39,10 @@ function SendCheckout({ hideUserRadioButtons = false }: SendCheckoutProps) {
       ></UserRadioButtons>
       )}
         <button
-      className={`${checckoutStyles.checkoutButton} ${hideUserRadioButtons ? checckoutStyles.disabled : ''}`}
+      className={`${checckoutStyles.checkoutButton} ${isButtonDisabled ? checckoutStyles.disabled : ''}`}
       id="checkout"
-      onTouchEnd={hideUserRadioButtons ? undefined : handleClick}
-      disabled={hideUserRadioButtons}
+      onTouchEnd={isButtonDisabled ? undefined : handleClick}
+      disabled={isButtonDisabled}
     >
       退勤する
     </button>
