@@ -16,6 +16,7 @@ function CheckoutWithText({ onModalOpen, onModalClose }: CheckoutWithTextProps) 
   const [inputValue, setInputValue] = useState("");
   const [preViewTime, setPreviewTime] = useState<string | null>(null);
   const [showUserRadioButtons, setShowUserRadioButtons] = useState(false);
+  const [isTemporarilyDisabled, setIsTemporarilyDisabled] = useState(false);
 
 
   const openModal = (): void => {
@@ -39,8 +40,13 @@ function CheckoutWithText({ onModalOpen, onModalClose }: CheckoutWithTextProps) 
   };
 
   const handleClickDOM = async () => {
+    setIsTemporarilyDisabled(true)
     const responseStatus = await sendCheckoutRequest(inputValue, userName);
     showAlertForCheckout(responseStatus, openModal)
+
+    setTimeout(() => {
+      setIsTemporarilyDisabled(false);
+    }, 500)
   };
 
   const handleRadioChange = (userName: string) => {
@@ -87,8 +93,9 @@ function CheckoutWithText({ onModalOpen, onModalClose }: CheckoutWithTextProps) 
             )}
 
             <button
-              className={checkoutWithTextStyle.squareButton}
+              className={`${checkoutWithTextStyle.squareButton} ${isTemporarilyDisabled ? checkoutWithTextStyle.disabled : ''}`}
               onTouchEnd={handleClickDOM}
+              disabled={isTemporarilyDisabled}
             >
               退勤する
             </button>
