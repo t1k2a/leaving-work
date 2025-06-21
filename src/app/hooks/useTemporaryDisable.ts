@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 
-export const useTemporaryDisable = (duration: number = 500): [boolean, () => void] => {
+const DEFAULT_DISABLE_DURATION_MS = 2000;
+
+export const useTemporaryDisable = (duration: number = DEFAULT_DISABLE_DURATION_MS): [boolean, () => void] => {
   const [isDisabled, setIsDisabled] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const disable = useCallback(() => {
