@@ -4,6 +4,7 @@ import checkoutWithTextStyle from "../styles/checkoutWithText.module.css";
 import { sendCheckoutRequest } from "@/app/utility/callApi";
 import showAlertForCheckout from "@/app/utility/showAlertForCheckout";
 import UserRadioButtons from "./parts/userRadioButtons";
+import { useTemporaryDisable } from "@/app/hooks/useTemporaryDisable";
 
 interface CheckoutWithTextProps {
   onModalOpen?: () => void;
@@ -16,8 +17,7 @@ function CheckoutWithText({ onModalOpen, onModalClose }: CheckoutWithTextProps) 
   const [inputValue, setInputValue] = useState("");
   const [preViewTime, setPreviewTime] = useState<string | null>(null);
   const [showUserRadioButtons, setShowUserRadioButtons] = useState(false);
-
-
+  const [isTemporarilyDisabled, disableTemporarily] = useTemporaryDisable();
   const openModal = (): void => {
     setShowUserRadioButtons(!showUserRadioButtons);
     
@@ -39,6 +39,7 @@ function CheckoutWithText({ onModalOpen, onModalClose }: CheckoutWithTextProps) 
   };
 
   const handleClickDOM = async () => {
+    disableTemporarily();
     const responseStatus = await sendCheckoutRequest(inputValue, userName);
     showAlertForCheckout(responseStatus, openModal)
   };
@@ -87,8 +88,9 @@ function CheckoutWithText({ onModalOpen, onModalClose }: CheckoutWithTextProps) 
             )}
 
             <button
-              className={checkoutWithTextStyle.squareButton}
-              onTouchEnd={handleClickDOM}
+              className={`${checkoutWithTextStyle.squareButton} ${isTemporarilyDisabled ? checkoutWithTextStyle.disabled : ''}`}
+              onTouchEnd={isTemporarilyDisabled ? undefined : handleClickDOM}
+              disabled={isTemporarilyDisabled}
             >
               退勤する
             </button>
