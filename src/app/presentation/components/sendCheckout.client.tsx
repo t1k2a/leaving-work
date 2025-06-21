@@ -4,6 +4,7 @@ import { sendCheckoutRequest } from "@/app/utility/callApi";
 import showAlertForCheckout from "@/app/utility/showAlertForCheckout";
 import React, { useState } from "react";
 import UserRadioButtons from "./parts/userRadioButtons";
+import { TEMPORARY_DISABLE_DURATION_MS } from "@/app/utility/constants";
 
 interface SendCheckoutProps {
   hideUserRadioButtons?: boolean;
@@ -21,12 +22,11 @@ function SendCheckout({ hideUserRadioButtons = false }: SendCheckoutProps) {
 
     setTimeout(() => {
       setIsTemporarilyDisabled(false);
-    }, 500)
+    }, TEMPORARY_DISABLE_DURATION_MS)
   };
   const handleRadioChange = (userName: string): void => {
     setUserName(userName);
   };
-
   const isButtonDisabled = hideUserRadioButtons || isTemporarilyDisabled;
 
   return (

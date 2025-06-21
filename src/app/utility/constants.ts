@@ -1,0 +1,1 @@
+export const TEMPORARY_DISABLE_DURATION_MS = 500;
