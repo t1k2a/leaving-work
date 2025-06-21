@@ -5,7 +5,7 @@ import { sendCheckoutRequest } from "@/app/utility/callApi";
 import showAlertForCheckout from "@/app/utility/showAlertForCheckout";
 import UserRadioButtons from "./parts/userRadioButtons";
 import { useRef, useEffect } from "react";
-import { TEMPORARY_DISABLE_DURATION_MS } from "@/app/utility/constants";
+import { useTemporaryDisable } from "@/app/hooks/useTemporaryDisable";
 
 interface CheckoutWithTextProps {
   onModalOpen?: () => void;
@@ -18,8 +18,17 @@ function CheckoutWithText({ onModalOpen, onModalClose }: CheckoutWithTextProps) 
   const [inputValue, setInputValue] = useState("");
   const [preViewTime, setPreviewTime] = useState<string | null>(null);
   const [showUserRadioButtons, setShowUserRadioButtons] = useState(false);
-  const [isTemporarilyDisabled, setIsTemporarilyDisabled] = useState(false);
+  const [isTemporarilyDisabled, disableTemporarily] = useTemporaryDisable();
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      // 既存のタイマーがあればクリアする
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, [])
 
   const openModal = (): void => {
     setShowUserRadioButtons(!showUserRadioButtons);
@@ -42,18 +51,13 @@ function CheckoutWithText({ onModalOpen, onModalClose }: CheckoutWithTextProps) 
   };
 
   const handleClickDOM = async () => {
-    setIsTemporarilyDisabled(true)
+    disableTemporarily();
     const responseStatus = await sendCheckoutRequest(inputValue, userName);
     showAlertForCheckout(responseStatus, openModal)
 
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
-
-    timerRef.current = setTimeout(() => {
-      setIsTemporarilyDisabled(false);
-      timerRef.current = null;
-    }, TEMPORARY_DISABLE_DURATION_MS)
   };
 
   const handleRadioChange = (userName: string) => {

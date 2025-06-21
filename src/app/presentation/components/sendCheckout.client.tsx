@@ -4,7 +4,7 @@ import { sendCheckoutRequest } from "@/app/utility/callApi";
 import showAlertForCheckout from "@/app/utility/showAlertForCheckout";
 import React, { useState, useRef, useEffect } from "react";
 import UserRadioButtons from "./parts/userRadioButtons";
-import { TEMPORARY_DISABLE_DURATION_MS } from "@/app/utility/constants";
+import { useTemporaryDisable } from "@/app/hooks/useTemporaryDisable";
 
 interface SendCheckoutProps {
   hideUserRadioButtons?: boolean;
@@ -12,7 +12,7 @@ interface SendCheckoutProps {
 
 function SendCheckout({ hideUserRadioButtons = false }: SendCheckoutProps) {
   const [userName, setUserName] = useState<string | null>(null);
-  const [isTemporarilyDisabled, setIsTemporarilyDisabled] = useState(false);
+  const [isTemporarilyDisabled, disableTemporarily] = useTemporaryDisable();
   const timerRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
@@ -24,15 +24,9 @@ function SendCheckout({ hideUserRadioButtons = false }: SendCheckoutProps) {
   }, [])
   const handleClick: React.TouchEventHandler<HTMLButtonElement> = async function () {
     // ボタンを一時的に無効化
-    setIsTemporarilyDisabled(true);
-
+    disableTemporarily();
     const responseStatus: number = await sendCheckoutRequest(null, userName);
     showAlertForCheckout(responseStatus)
-
-    timerRef.current = setTimeout(() => {
-      setIsTemporarilyDisabled(false);
-      timerRef.current = null;
-    }, TEMPORARY_DISABLE_DURATION_MS)
   };
   const handleRadioChange = (userName: string): void => {
     setUserName(userName);
