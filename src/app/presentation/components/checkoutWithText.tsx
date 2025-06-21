@@ -19,17 +19,6 @@ function CheckoutWithText({ onModalOpen, onModalClose }: CheckoutWithTextProps) 
   const [preViewTime, setPreviewTime] = useState<string | null>(null);
   const [showUserRadioButtons, setShowUserRadioButtons] = useState(false);
   const [isTemporarilyDisabled, disableTemporarily] = useTemporaryDisable();
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    return () => {
-      // 既存のタイマーがあればクリアする
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
-    };
-  }, [])
-
   const openModal = (): void => {
     setShowUserRadioButtons(!showUserRadioButtons);
     
@@ -54,10 +43,6 @@ function CheckoutWithText({ onModalOpen, onModalClose }: CheckoutWithTextProps) 
     disableTemporarily();
     const responseStatus = await sendCheckoutRequest(inputValue, userName);
     showAlertForCheckout(responseStatus, openModal)
-
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-    }
   };
 
   const handleRadioChange = (userName: string) => {

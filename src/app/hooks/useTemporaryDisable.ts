@@ -1,9 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 
-export const useTemporaryDisable = (): [boolean, () => void] => {
+export const useTemporaryDisable = (duration: number = 500): [boolean, () => void] => {
   const [isDisabled, setIsDisabled] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const TEMPORARY_DISABLE_DURATION_MS = 500;
   const disable = useCallback(() => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
@@ -12,11 +11,11 @@ export const useTemporaryDisable = (): [boolean, () => void] => {
     timerRef.current = setTimeout(() => {
       setIsDisabled(false);
       timerRef.current = null;
-    }, TEMPORARY_DISABLE_DURATION_MS);
-  }, [TEMPORARY_DISABLE_DURATION_MS]);
+    }, duration);
+  }, [duration]);
 
   useEffect(() => {
-    // Cleanup on unmount
+    // アンマウント時のクリーンアップ
     return () => {
       if (timerRef.current) {
         clearTimeout(timerRef.current);

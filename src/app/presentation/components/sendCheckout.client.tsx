@@ -13,15 +13,6 @@ interface SendCheckoutProps {
 function SendCheckout({ hideUserRadioButtons = false }: SendCheckoutProps) {
   const [userName, setUserName] = useState<string | null>(null);
   const [isTemporarilyDisabled, disableTemporarily] = useTemporaryDisable();
-  const timerRef = useRef<NodeJS.Timeout | null>(null)
-
-  useEffect(() => {
-    return () => {
-      if(timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
-    }
-  }, [])
   const handleClick: React.TouchEventHandler<HTMLButtonElement> = async function () {
     // ボタンを一時的に無効化
     disableTemporarily();
