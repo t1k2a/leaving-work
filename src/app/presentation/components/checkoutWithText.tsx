@@ -89,7 +89,7 @@ function CheckoutWithText({ onModalOpen, onModalClose }: CheckoutWithTextProps) 
 
             <button
               className={`${checkoutWithTextStyle.squareButton} ${isTemporarilyDisabled ? checkoutWithTextStyle.disabled : ''}`}
-              onTouchEnd={handleClickDOM}
+              onTouchEnd={isTemporarilyDisabled ? undefined : handleClickDOM}
               disabled={isTemporarilyDisabled}
             >
               退勤する
