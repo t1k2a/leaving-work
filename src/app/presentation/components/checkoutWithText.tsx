@@ -21,16 +21,6 @@ function CheckoutWithText({ onModalOpen, onModalClose }: CheckoutWithTextProps) 
   const [isTemporarilyDisabled, setIsTemporarilyDisabled] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    return () => {
-
-      // 既存のタイマーがあればクリアする
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
-    };
-  }, [])
-
   const openModal = (): void => {
     setShowUserRadioButtons(!showUserRadioButtons);
     

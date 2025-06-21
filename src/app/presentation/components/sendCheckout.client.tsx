@@ -29,11 +29,6 @@ function SendCheckout({ hideUserRadioButtons = false }: SendCheckoutProps) {
     const responseStatus: number = await sendCheckoutRequest(null, userName);
     showAlertForCheckout(responseStatus)
 
-    // 既存のタイマーがあればクリアする処理を実行
-    if (timerRef.current) {
-      clearTimeout(timerRef.current)
-    }
-
     timerRef.current = setTimeout(() => {
       setIsTemporarilyDisabled(false);
       timerRef.current = null;
