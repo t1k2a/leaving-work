@@ -2,7 +2,7 @@
 import checckoutStyles from "../styles/checkout.module.css";
 import { sendCheckoutRequest } from "@/app/utility/callApi";
 import showAlertForCheckout from "@/app/utility/showAlertForCheckout";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import UserRadioButtons from "./parts/userRadioButtons";
 import { useTemporaryDisable } from "@/app/hooks/useTemporaryDisable";
 

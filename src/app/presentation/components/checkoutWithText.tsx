@@ -4,7 +4,6 @@ import checkoutWithTextStyle from "../styles/checkoutWithText.module.css";
 import { sendCheckoutRequest } from "@/app/utility/callApi";
 import showAlertForCheckout from "@/app/utility/showAlertForCheckout";
 import UserRadioButtons from "./parts/userRadioButtons";
-import { useRef, useEffect } from "react";
 import { useTemporaryDisable } from "@/app/hooks/useTemporaryDisable";
 
 interface CheckoutWithTextProps {
