@@ -4,6 +4,7 @@ import { sendCheckoutRequest } from "@/app/utility/callApi";
 import showAlertForCheckout from "@/app/utility/showAlertForCheckout";
 import React, { useState } from "react";
 import UserRadioButtons from "./parts/userRadioButtons";
+import { useTemporaryDisable } from "@/app/hooks/useTemporaryDisable";
 
 interface SendCheckoutProps {
   hideUserRadioButtons?: boolean;
@@ -11,13 +12,17 @@ interface SendCheckoutProps {
 
 function SendCheckout({ hideUserRadioButtons = false }: SendCheckoutProps) {
   const [userName, setUserName] = useState<string | null>(null);
+  const [isTemporarilyDisabled, disableTemporarily] = useTemporaryDisable();
   const handleClick: React.TouchEventHandler<HTMLButtonElement> = async function () {
+    // ボタンを一時的に無効化
+    disableTemporarily();
     const responseStatus: number = await sendCheckoutRequest(null, userName);
     showAlertForCheckout(responseStatus)
   };
   const handleRadioChange = (userName: string): void => {
     setUserName(userName);
   };
+  const isButtonDisabled = hideUserRadioButtons || isTemporarilyDisabled;
 
   return (
     <div>
@@ -29,10 +34,10 @@ function SendCheckout({ hideUserRadioButtons = false }: SendCheckoutProps) {
       ></UserRadioButtons>
       )}
         <button
-      className={`${checckoutStyles.checkoutButton} ${hideUserRadioButtons ? checckoutStyles.disabled : ''}`}
+      className={`${checckoutStyles.checkoutButton} ${isButtonDisabled ? checckoutStyles.disabled : ''}`}
       id="checkout"
-      onTouchEnd={hideUserRadioButtons ? undefined : handleClick}
-      disabled={hideUserRadioButtons}
+      onTouchEnd={isButtonDisabled ? undefined : handleClick}
+      disabled={isButtonDisabled}
     >
       退勤する
     </button>
