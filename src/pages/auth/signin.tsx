@@ -2,10 +2,12 @@ import { GetServerSideProps } from 'next'
 import { getServerSession } from 'next-auth/next'
 import { signIn } from 'next-auth/react'
 import { useState } from 'react'
-import { authOptions } from '../api/[...nextauth]'
+import { authOptions } from '@/pages/api/[...nextauth]'
 import styles from '../../app/presentation/styles/auth.module.css'
+import { useRouter } from 'next/router'
 
 export default function SignIn() {
+  const router = useRouter()
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -23,8 +25,8 @@ export default function SignIn() {
 
     if (result?.error) {
       setError('パスワードが正しくありません')
-    } else if (result?.url) {
-      window.location.href = result.url
+    } else if (result?.url && result.url !== '/') {
+      router.push(result.url)
     }
     
     setIsLoading(false)
