@@ -22,8 +22,8 @@ export default function SignIn() {
 
         if (result?.error) {
             setError('パスワードが正しくありません')
-        } else {
-            window.location.href = '/'
+        } else if (result?.url && result.url !== '/') {
+            window.location.href = result.url
         }
 
         setIsLoading(false)

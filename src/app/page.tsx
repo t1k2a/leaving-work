@@ -25,7 +25,14 @@ export default function Home(): JSX.Element {
 
   if (!session) {
     signIn(undefined, { callbackUrl: '/' });
-    return <div>リダイレクト中...</div>;
+    return (
+      <div>
+        リダイレクト中...
+        <noscript>
+          <meta http-equiv="Refresh" content="0; url=/" />
+        </noscript>
+      </div>
+    );
   }
 
   return (
