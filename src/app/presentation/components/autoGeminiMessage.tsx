@@ -6,14 +6,15 @@ import styles from "../styles/autoGemini.module.css";
 interface GeminiResponse {
     text: string;
     timestamp: string;
+    cached: boolean;
     error?: string;
-    fallbackMessage?: string;
 }
 
 export default function AutoGeminiMessage() {
     const [message, setMessage] = useState<string>("");
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(false);
+    const [isCached, setIsCached] = useState(false);
 
     useEffect(() => {
         fetchGeminiMessage();
@@ -34,6 +35,7 @@ export default function AutoGeminiMessage() {
 
             const data: GeminiResponse = await response.json();
             setMessage(data.text);
+            setIsCached(data.cached);
         } catch (error) {
             console.error('Gemini API呼び出しエラー:', error);
             setMessage("**今日も一日、本当にお疲れ様でした！** 🌟");
@@ -56,15 +58,16 @@ export default function AutoGeminiMessage() {
 
     return (
         <div className={styles.container}>
-            <div className={`${styles.messageCard} ${error ? styles.fallback: ''}`}>
+            <div className={`${styles.messageCard} ${error ? styles.fallback : ''}`}>
                 <div className={styles.icon}>
-                    {error ? '🌙' : '🌟'}
+                    {error ? '🌙' : isCached ? '💾' : '🌟'}
                 </div>
                 <div className={styles.content}>
                     <h3 className={styles.title}>
-                        {error ? '今日の労い' : 'AIからの今日の労い'}
+                        {error ? '今日の労い' : 
+                         isCached ? 'AIメッセージ' : 'AIからの今日の労い'}
                     </h3>
-                    <div className={styles.markdownContent}>
+                    <div>
                         <ReactMarkdown>{message}</ReactMarkdown>
                     </div>
                 </div>
