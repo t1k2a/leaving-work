@@ -4,6 +4,7 @@ import checkoutStyles from "./presentation/styles/checkout.module.css";
 import CurrentTime from "./presentation/components/currentTime";
 import SendCheckout from "./presentation/components/sendCheckout.client";
 import CheckoutWithText from "./presentation/components/checkoutWithText";
+import AutoGeminiMessage from "./presentation/components/autoGeminiMessage";
 import { useState } from "react";
 
 export default function Home(): JSX.Element {
@@ -20,12 +21,15 @@ export default function Home(): JSX.Element {
   return (
     <main className={checkoutStyles.main} id="main">
       <div className={checkoutStyles.mainPosition}>
+
         <SendCheckout hideUserRadioButtons={hideUserRadioButtons} />
         <CurrentTime />
         <CheckoutWithText
           onModalOpen={handleTextCheckoutOpen}
           onModalClose={handleTextCheckoutClose}
         />
+                {/* AI自動メッセージ */}
+                <AutoGeminiMessage />
       </div>
     </main>
   );
