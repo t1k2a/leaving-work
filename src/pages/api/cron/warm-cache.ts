@@ -28,18 +28,16 @@ async function generateFreshMessage(): Promise<string> {
   ];
 
   const selectedPrompt = prompts[Math.floor(Math.random() * prompts.length)];
-
   const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-
   const response = await Promise.race([
     model.generateContent(selectedPrompt),
-    new Promise((_, reject) => 
+    new Promise<never>((_, reject) =>
       setTimeout(() => reject(new Error('Timeout')), 5000)
     )
-  ]) as any;
+  ]);
 
   // 安全な文字列取得とnullチェック
-  const text = response?.text || response?.candidates?.[0]?.content?.parts?.[0]?.text;
+  const text = response.response.text()
   
   if (!text || typeof text !== 'string' || !text.trim()) {
     throw new Error('Invalid response from Gemini API');

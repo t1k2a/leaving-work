@@ -25,47 +25,46 @@ const ultraFastMessages = [
 async function getMessageWithFallback(): Promise<{ text: string; source: string }> {
   const promises = [
     // 戦略1: キャッシュから取得
-    getCache(CACHE_KEY).then(cached => 
-      cached && typeof cached === 'string' && cached.trim() 
-        ? { text: cached, source: 'cache' } 
-        : null
-    ),
+    getCache(CACHE_KEY).then(cached => {
+      if (cached && typeof cached === 'string' && cached.trim()) {
+        return { text: cached, source: 'cache' };
+      }
+      return Promise.reject('cache miss');
+    }),
     
     // 戦略2: Gemini API（1.5秒でタイムアウト）
     Promise.race([
-      geminiAPImain().then(text => 
-        text && typeof text === 'string' && text.trim()
-          ? { text, source: 'gemini' } 
-          : null
-      ),
-      new Promise<null>((_, reject) => 
+      geminiAPImain().then(text => {
+        if (text && typeof text === 'string' && text.trim()) {
+          return { text, source: 'gemini' };
+        }
+        return Promise.reject('gemini empty response');
+      }),
+      new Promise<never>((_, reject) => 
         setTimeout(() => reject(new Error('Gemini timeout')), 1500)
       )
-    ]).catch(() => null),
+    ]),
     
-    // 戦略3: 超高速フォールバック（即座に実行）
+    // 戦略3: 超高速フォールバック
     new Promise<{ text: string; source: string }>(resolve => 
       setTimeout(() => resolve({
         text: ultraFastMessages[Math.floor(Math.random() * ultraFastMessages.length)],
         source: 'ultrafast'
-      }), 800) // 0.8秒後にフォールバック準備
+      }), 800)
     )
   ];
 
-  // 最初に成功したものを返す
-  const results = await Promise.allSettled(promises);
-  
-  for (const result of results) {
-    if (result.status === 'fulfilled' && result.value && result.value.text) {
-      return result.value;
-    }
+  try {
+    // Promise.anyを使用：最初に成功したPromiseを返す
+    return await Promise.any(promises);
+  } catch (error) {
+    // 全て失敗した場合の最終フォールバック
+    console.error('All promises failed:', error);
+    return {
+      text: "**今日もお疲れ様でした！** 🌟",
+      source: 'emergency'
+    };
   }
-
-  // 全て失敗した場合の最終フォールバック
-  return {
-    text: "**今日もお疲れ様でした！** 🌟",
-    source: 'emergency'
-  };
 }
 
 export interface GeminiResponse {
