@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import * as dotenv from 'dotenv';
+import SessionWrapper from "./components/SessionWrapper";
 
 dotenv.config({path: `${process.cwd()}/.env`});
 
@@ -20,7 +21,11 @@ export default function RootLayout({
 }>): JSX.Element {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <SessionWrapper>
+          {children}
+        </SessionWrapper>
+      </body>
     </html>
   );
 }
