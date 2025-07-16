@@ -6,9 +6,11 @@ import SendCheckout from "./presentation/components/sendCheckout.client";
 import CheckoutWithText from "./presentation/components/checkoutWithText";
 import AutoGeminiMessage from "./presentation/components/autoGeminiMessage";
 import { useState } from "react";
+import { useSession, signOut, signIn } from "next-auth/react";
 
 export default function Home(): JSX.Element {
   const [hideUserRadioButtons, setHideUserRadioButtons] = useState(false);
+  const { data: session, status } = useSession();
 
   const handleTextCheckoutOpen = () => {
     setHideUserRadioButtons(true);
@@ -18,10 +20,32 @@ export default function Home(): JSX.Element {
     setHideUserRadioButtons(false);
   };
 
+  if (status === 'loading') {
+    return <div>読み込み中...</div>;
+  }
+
+  if (!session) {
+    signIn(undefined, { callbackUrl: '/' });
+    return (
+      <div>
+        リダイレクト中...
+        <noscript>
+          <meta http-equiv="Refresh" content="0; url=/" />
+        </noscript>
+      </div>
+    );
+  }
+
   return (
     <main className={checkoutStyles.main} id="main">
       <div className={checkoutStyles.mainPosition}>
-
+        <div className={checkoutStyles.logoutButton}>
+          <button
+            onClick={() => signOut({ callbackUrl: '/' })}
+            className={checkoutStyles.logout}>
+              ログアウト
+          </button>
+        </div>
         <SendCheckout hideUserRadioButtons={hideUserRadioButtons} />
         <CurrentTime />
         <CheckoutWithText
