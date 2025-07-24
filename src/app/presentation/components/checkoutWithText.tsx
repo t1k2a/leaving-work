@@ -77,6 +77,12 @@ function CheckoutWithText({ onModalOpen, onModalClose }: CheckoutWithTextProps) 
               name="text"
               className={checkoutWithTextStyle.modalTextArea}
               onChange={handleChange}
+              onFocus={(e) => {
+                e.preventDefault();
+                setTimeout(() => {
+                  window.scrollTo(0, 0);
+                }, 0);
+              }}
             ></textarea>
             {inputValue && (
               <div className={checkoutWithTextStyle.modalPreview}>
