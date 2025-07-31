@@ -83,3 +83,25 @@
 .logout:hover {
   background-color: #c82333;
 }
+
+/* ゲームボタンのスタイル */
+.gameButton {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  text-decoration: none;
+}
+
+.playGame {
+  padding: 0.5rem 1rem;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.playGame:hover {
+  background-color: #218838;
+}

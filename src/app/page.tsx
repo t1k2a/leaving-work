@@ -52,6 +52,11 @@ export default function Home(): JSX.Element {
           onModalOpen={handleTextCheckoutOpen}
           onModalClose={handleTextCheckoutClose}
         />
+        <a href="/game/index.html" className={checkoutStyles.gameButton}>
+          <button className={checkoutStyles.playGame}>
+            ゲームをプレイする
+          </button>
+        </a>
                 {/* AI自動メッセージ */}
                 <AutoGeminiMessage />
       </div>
