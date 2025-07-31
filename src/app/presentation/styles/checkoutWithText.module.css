@@ -116,6 +116,10 @@
   line-height: 1.4;
 }
 
+.dimmed {
+  opacity: 0.2;
+}
+
 .previewText {
   font-weight: bold;
   color: #333;
