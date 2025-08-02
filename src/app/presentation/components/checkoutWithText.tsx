@@ -87,7 +87,11 @@ function CheckoutWithText({ onModalOpen, onModalClose }: CheckoutWithTextProps) 
             {inputValue && (
               <div className={checkoutWithTextStyle.modalPreview}>
                 <p className={checkoutWithTextStyle.previewTitle}>↓ プレビュー</p>
-                <p className={checkoutWithTextStyle.previewMessage}>{userName? userName + "が、" : ""}{preViewTime}:退勤しました！</p>
+                <p
+                  className={`${checkoutWithTextStyle.previewMessage} ${isOpen ? checkoutWithTextStyle.dimmed : ""}`}
+                >
+                  {userName? userName + "が、" : ""}{preViewTime}:退勤しました！
+                </p>
                 <p className={checkoutWithTextStyle.previewText}>追加テキスト：</p>
                 <p className={checkoutWithTextStyle.previewText}>{inputValue}</p>
               </div>
