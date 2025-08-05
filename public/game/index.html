@@ -981,6 +981,12 @@
                 clearInterval(autoShootInterval);
                 autoShootInterval = null;
             }
+
+            autoShootInterval = setInterval(() => {
+                if (gameRunning) {
+                    createBullet(player.x + player.width / 2, player.y);
+                }
+            }, 400);
             
             gameLoop();
         }
