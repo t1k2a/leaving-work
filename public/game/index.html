@@ -759,7 +759,7 @@
                     bullet.y + bullet.height > boss.y) {
                     
                     bullets.splice(bulletIndex, 1);
-                    boss.hp -= 10;
+                    boss.hp -= 5;
                     updateBossHealth();
                 }
             });
@@ -970,7 +970,7 @@
                 if (gameRunning) {
                     createBullet(player.x + player.width / 2, player.y);
                 }
-            }, 200);
+            }, 400);
             
             gameLoop();
         }
@@ -984,7 +984,7 @@
             if (!bossActive && !boss && !gameCompleted) {
                 if (!showBossIntro) {
                     showBossIntroduction();
-                } else if (Date.now() - bossIntroTimer > 2000) {
+                } else if (Date.now() - bossIntroTimer > 1000) {
                     createBoss();
                     showBossIntro = false;
                 }
