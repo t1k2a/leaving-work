@@ -984,7 +984,7 @@
             if (!bossActive && !boss && !gameCompleted) {
                 if (!showBossIntro) {
                     showBossIntroduction();
-                } else if (Date.now() - bossIntroTimer > 2000) {
+                } else if (Date.now() - bossIntroTimer > 1000) {
                     createBoss();
                     showBossIntro = false;
                 }
