@@ -16,6 +16,12 @@ function SendCheckout({ hideUserRadioButtons = false }: SendCheckoutProps) {
   const [userId, setUserId] = useState<string | null>(null);
   const [isTemporarilyDisabled, disableTemporarily] = useTemporaryDisable();
   const handleClick: React.TouchEventHandler<HTMLButtonElement> = async function () {
+
+    if (userId == undefined) {
+      alert('ユーザーを選択してください')
+      return;
+    }
+
     // ボタンを一時的に無効化
     disableTemporarily();
     
@@ -25,8 +31,10 @@ function SendCheckout({ hideUserRadioButtons = false }: SendCheckoutProps) {
         const now = new Date();
         const clockOutTime = now.toISOString();
         await postWorkRecord(String(userId), clockOutTime);
+        alert('退勤登録が完了しました');
       } catch (error) {
         console.error('退勤記録の登録に失敗しました:', error);
+        alert('退勤登録に失敗しました');
       }
     }
     
@@ -37,7 +45,7 @@ function SendCheckout({ hideUserRadioButtons = false }: SendCheckoutProps) {
     setUserName(userName);
     setUserId(userId);
   };
-  const isButtonDisabled = hideUserRadioButtons || isTemporarilyDisabled;
+  const isButtonDisabled = userId == undefined || hideUserRadioButtons || isTemporarilyDisabled;
 
   return (
     <div>
@@ -49,7 +57,8 @@ function SendCheckout({ hideUserRadioButtons = false }: SendCheckoutProps) {
       ></UserRadioButtons>
       )}
         <button
-      className={`${checckoutStyles.checkoutButton} ${isButtonDisabled ? checckoutStyles.disabled : ''}`}
+      className={`${checckoutStyles.checkoutButton} 
+      ${isButtonDisabled ? checckoutStyles.disabled : ''}`}
       id="checkout"
       onTouchEnd={isButtonDisabled ? undefined : handleClick}
       disabled={isButtonDisabled}

@@ -20,7 +20,7 @@ function CheckoutWithText({ onModalOpen, onModalClose }: CheckoutWithTextProps) 
   const [isTemporarilyDisabled, disableTemporarily] = useTemporaryDisable();
   const openModal = (): void => {
     setShowUserRadioButtons(!showUserRadioButtons);
-    
+    disableTemporarily();
     if (isOpen) {
       setInputValue("");
       // モーダルが閉じるとき
@@ -39,7 +39,12 @@ function CheckoutWithText({ onModalOpen, onModalClose }: CheckoutWithTextProps) 
   };
 
   const handleClickDOM = async () => {
-    disableTemporarily();
+    if (userName == undefined) {
+      alert('ユーザーを選択してください')
+      return;
+    } else {
+        disableTemporarily();
+    }
     const responseStatus = await sendCheckoutRequest(inputValue, userName);
     showAlertForCheckout(responseStatus, openModal)
   };
