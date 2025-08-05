@@ -39,7 +39,7 @@ function CheckoutWithText({ onModalOpen, onModalClose }: CheckoutWithTextProps) 
   };
 
   const handleClickDOM = async () => {
-    if (userName == undefined) {
+    if (userName === null) {
       alert('ユーザーを選択してください')
       return;
     } else {
