@@ -1,0 +1,267 @@
+/* 通知バナー */
+.announcementBanner {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50%;
+  max-width: 600px;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 1000;
+  animation: slideDown 0.3s ease-out;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  border-radius: 8px;
+}
+
+.announcementBanner.maintenance {
+  background-color: #fff3cd;
+  border: 2px solid #ffc107;
+  color: #856404;
+}
+
+.announcementBanner.info {
+  background-color: #d1ecf1;
+  border: 2px solid #17a2b8;
+  color: #0c5460;
+}
+
+.announcementBanner.warning {
+  background-color: #f8d7da;
+  border: 2px solid #dc3545;
+  color: #721c24;
+}
+
+.announcementBanner.update {
+  background-color: #d4edda;
+  border: 2px solid #28a745;
+  color: #155724;
+}
+
+.bannerContent {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.bannerIcon {
+  font-size: 20px;
+}
+
+.bannerText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bannerTitle {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.bannerMessage {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.bannerClose {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  padding: 0 8px;
+  color: inherit;
+}
+
+.bannerClose:hover {
+  opacity: 1;
+}
+
+/* 通知アイコン */
+.notificationContainer {
+  position: relative;
+}
+
+.notificationButton {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.notificationButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.notificationIcon {
+  width: 24px;
+  height: 24px;
+  fill: black;
+}
+
+.notificationBadge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: #dc3545;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: bold;
+  border: 2px solid white;
+}
+
+/* 通知ポップオーバー */
+.notificationPopover {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  width: 320px;
+  max-height: 400px;
+  z-index: 1001;
+  overflow: hidden;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.popoverHeader {
+  padding: 16px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.popoverTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.notificationList {
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.notificationItem {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  gap: 12px;
+}
+
+.notificationItem:hover {
+  background: #fafafa;
+}
+
+.notificationItem:last-child {
+  border-bottom: none;
+}
+
+.notificationIndicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.notificationIndicator.maintenance {
+  background: #ffc107;
+}
+
+.notificationIndicator.info {
+  background: #17a2b8;
+}
+
+.notificationIndicator.warning {
+  background: #dc3545;
+}
+
+.notificationIndicator.update {
+  background: #28a745;
+}
+
+.notificationContent {
+  flex: 1;
+}
+
+.notificationTitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.notificationDate {
+  font-size: 12px;
+  color: #999;
+}
+
+.emptyState {
+  padding: 40px 20px;
+  text-align: center;
+  color: #999;
+}
+
+/* アニメーション */
+@keyframes slideDown {
+  from {
+    transform: translateX(-50%) translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .announcementBanner {
+    width: 90%;
+    padding: 10px 15px;
+    top: 10px;
+  }
+
+  .bannerTitle {
+    font-size: 13px;
+  }
+
+  .bannerMessage {
+    font-size: 12px;
+  }
+
+  .notificationPopover {
+    width: 280px;
+    right: -50px;
+  }
+}
