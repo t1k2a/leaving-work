@@ -43,7 +43,7 @@ function SendCheckout({ hideUserRadioButtons = false }: SendCheckoutProps) {
     setUserName(userName);
     setUserId(userId);
   };
-  const isButtonDisabled = userId == undefined || hideUserRadioButtons || isTemporarilyDisabled;
+  const isButtonDisabled = !userId || hideUserRadioButtons || isTemporarilyDisabled;
 
   return (
     <div>
