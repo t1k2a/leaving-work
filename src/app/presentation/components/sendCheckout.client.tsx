@@ -29,8 +29,12 @@ function SendCheckout({ hideUserRadioButtons = false }: SendCheckoutProps) {
     try {
       const now = new Date();
       const clockOutTime = now.toISOString();
-      await postWorkRecord(String(userId), clockOutTime);
-      alert('退勤登録が完了しました');
+      const isDev: boolean = process.env.NODE_ENV === 'development';
+
+      if (isDev) {
+        await postWorkRecord(String(userId), clockOutTime);
+        alert('退勤登録が完了しました');
+      }
     } catch (error) {
       console.error('退勤記録の登録に失敗しました:', error);
       alert('退勤登録に失敗しました');
