@@ -5,6 +5,8 @@ import CurrentTime from "./presentation/components/currentTime";
 import SendCheckout from "./presentation/components/sendCheckout.client";
 import CheckoutWithText from "./presentation/components/checkoutWithText";
 import AutoGeminiMessage from "./presentation/components/autoGeminiMessage";
+import AnnouncementBanner from "./presentation/components/announcement/announcementBanner";
+import NotificationIcon from "./presentation/components/announcement/notificationIcon";
 import { useState } from "react";
 import { useSession, signOut, signIn } from "next-auth/react";
 
@@ -37,9 +39,12 @@ export default function Home(): JSX.Element {
   }
 
   return (
+    <>
+    <AnnouncementBanner />
     <main className={checkoutStyles.main} id="main">
       <div className={checkoutStyles.mainPosition}>
         <div className={checkoutStyles.logoutButton}>
+          <NotificationIcon />
           <button
             onClick={() => signOut({ callbackUrl: '/' })}
             className={checkoutStyles.logout}>
@@ -57,9 +62,10 @@ export default function Home(): JSX.Element {
             ゲームをプレイする
           </button>
         </a>
-                {/* AI自動メッセージ */}
-                <AutoGeminiMessage />
+        {/* AI自動メッセージ */}
+        <AutoGeminiMessage />
       </div>
     </main>
+    </>
   );
 }
