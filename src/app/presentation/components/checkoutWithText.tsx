@@ -42,9 +42,9 @@ function CheckoutWithText({ onModalOpen, onModalClose }: CheckoutWithTextProps) 
     if (userName === null) {
       alert('ユーザーを選択してください')
       return;
-    } else {
-        disableTemporarily();
     }
+        
+    disableTemporarily();
     const responseStatus = await sendCheckoutRequest(inputValue, userName);
     showAlertForCheckout(responseStatus, openModal)
   };
