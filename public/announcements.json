@@ -1,0 +1,38 @@
+{
+  "announcements": [
+    {
+      "id": "notice_001",
+      "title": "お知らせ機能を追加しました",
+      "message": "",
+      "type": "info",
+      "priority": "low",
+      "startDate": "2024-12-20T00:00:00",
+      "endDate": "2025-01-10T23:59:59",
+      "isActive": true,
+      "createdAt": "2025-08-06T17:00:00"
+    },
+    {
+      "id": "notice_002",
+      "title": "ユーザー選択しないと退勤できないように修正しました",
+      "message": "",
+      "type": "update",
+      "priority": "high",
+      "startDate": "2025-01-06T00:00:00",
+      "endDate": "2025-01-20T23:59:59",
+      "isActive": true,
+      "createdAt": "2025-08-05T23:00:00"
+    },
+
+    {
+      "id": "notice_003",
+      "title": "ゲームの難易度を上げました",
+      "message": "",
+      "type": "info",
+      "priority": "medium",
+      "startDate": "2024-12-20T00:00:00",
+      "endDate": "2025-01-10T23:59:59",
+      "isActive": true,
+      "createdAt": "2025-08-05T22:00:00"
+    }
+  ]
+}

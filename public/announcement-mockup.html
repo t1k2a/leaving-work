@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お知らせ機能 - デザインモックアップ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* 通知バナー */
+        .announcement-banner {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+            max-width: 600px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+            animation: slideDown 0.3s ease-out;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            border-radius: 8px;
+        }
+
+        .announcement-banner.maintenance {
+            background-color: #fff3cd;
+            border: 2px solid #ffc107;
+            color: #856404;
+        }
+
+        .announcement-banner.info {
+            background-color: #d1ecf1;
+            border: 2px solid #17a2b8;
+            color: #0c5460;
+        }
+
+        .announcement-banner.warning {
+            background-color: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+        }
+
+        .announcement-banner.update {
+            background-color: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+
+        .banner-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .banner-icon {
+            font-size: 20px;
+        }
+
+        .banner-text {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .banner-title {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .banner-message {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .banner-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            padding: 0 8px;
+        }
+
+        .banner-close:hover {
+            opacity: 1;
+        }
+
+        /* メインコンテナ（既存のページを想定） */
+        .main-container {
+            max-width: 800px;
+            margin: 100px auto 0;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        /* 通知アイコン */
+        .notification-button {
+            position: relative;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .notification-button:hover {
+            background: #f0f0f0;
+        }
+
+        .notification-icon {
+            width: 24px;
+            height: 24px;
+            fill: #666;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: #dc3545;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+            border: 2px solid white;
+        }
+
+        /* 通知ポップオーバー */
+        .notification-popover {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            width: 320px;
+            max-height: 400px;
+            display: none;
+            z-index: 1001;
+            overflow: hidden;
+        }
+
+        .notification-popover.show {
+            display: block;
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        .popover-header {
+            padding: 16px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .popover-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .mark-all-read {
+            font-size: 12px;
+            color: #667eea;
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .mark-all-read:hover {
+            background: #f0f0f0;
+        }
+
+        .notification-list {
+            max-height: 320px;
+            overflow-y: auto;
+        }
+
+        .notification-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            gap: 12px;
+        }
+
+        .notification-item:hover {
+            background: #fafafa;
+        }
+
+        .notification-item.unread {
+            background: #f8f9ff;
+        }
+
+        .notification-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-top: 6px;
+            flex-shrink: 0;
+        }
+
+        .notification-indicator.maintenance {
+            background: #ffc107;
+        }
+
+        .notification-indicator.info {
+            background: #17a2b8;
+        }
+
+        .notification-indicator.warning {
+            background: #dc3545;
+        }
+
+        .notification-indicator.update {
+            background: #28a745;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .notification-date {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .popover-footer {
+            padding: 12px 16px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+        }
+
+        .view-all {
+            font-size: 13px;
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .view-all:hover {
+            text-decoration: underline;
+        }
+
+        /* ログアウトボタン */
+        .logout-button {
+            padding: 8px 16px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .logout-button:hover {
+            background: #5a67d8;
+        }
+
+        /* コンテンツエリア */
+        .content {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .content h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .content p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* アニメーション */
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .announcement-banner {
+                width: 90%;
+                padding: 10px 15px;
+                top: 10px;
+            }
+
+            .banner-title {
+                font-size: 13px;
+            }
+
+            .banner-message {
+                font-size: 12px;
+            }
+
+            .notification-popover {
+                width: 280px;
+                right: -50px;
+            }
+
+            .main-container {
+                margin-top: 80px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 通知バナー（重要なお知らせ） -->
+    <div class="announcement-banner maintenance" id="banner">
+        <div class="banner-content">
+            <span class="banner-icon">⚠️</span>
+            <div class="banner-text">
+                <div class="banner-title">システムメンテナンスのお知らせ</div>
+                <div class="banner-message">3月15日（金）22:00～24:00の間、システムメンテナンスを実施いたします。</div>
+            </div>
+        </div>
+        <button class="banner-close" onclick="closeBanner()">×</button>
+    </div>
+
+    <!-- メインコンテナ -->
+    <div class="main-container">
+        <div class="header">
+            <h1 class="header-title">退勤管理システム</h1>
+            <div class="header-actions">
+                <!-- 通知アイコン -->
+                <div style="position: relative;">
+                    <button class="notification-button" onclick="togglePopover()">
+                        <svg class="notification-icon" viewBox="0 0 24 24">
+                            <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+                        </svg>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    
+                    <!-- 通知ポップオーバー -->
+                    <div class="notification-popover" id="popover">
+                        <div class="popover-header">
+                            <span class="popover-title">お知らせ</span>
+                            <button class="mark-all-read">すべて既読にする</button>
+                        </div>
+                        <div class="notification-list">
+                            <div class="notification-item unread">
+                                <div class="notification-indicator maintenance"></div>
+                                <div class="notification-content">
+                                    <div class="notification-title">システムメンテナンスのお知らせ</div>
+                                    <div class="notification-date">2025年1月6日 10:00</div>
+                                </div>
+                            </div>
+                            <div class="notification-item unread">
+                                <div class="notification-indicator update"></div>
+                                <div class="notification-content">
+                                    <div class="notification-title">新機能リリースのお知らせ</div>
+                                    <div class="notification-date">2025年1月6日 09:00</div>
+                                </div>
+                            </div>
+                            <div class="notification-item unread">
+                                <div class="notification-indicator info"></div>
+                                <div class="notification-content">
+                                    <div class="notification-title">年末年始の営業について</div>
+                                    <div class="notification-date">2024年12月20日 10:00</div>
+                                </div>
+                            </div>
+                            <div class="notification-item">
+                                <div class="notification-indicator warning"></div>
+                                <div class="notification-content">
+                                    <div class="notification-title">セキュリティアップデートのお知らせ</div>
+                                    <div class="notification-date">2024年12月15日 14:00</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="popover-footer">
+                            <a href="#" class="view-all">すべてのお知らせを見る</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ログアウトボタン -->
+                <button class="logout-button">ログアウト</button>
+            </div>
+        </div>
+
+        <div class="content">
+            <h2>ダッシュボード</h2>
+            <p>お知らせ機能のデザインモックアップです。</p>
+            <br>
+            <h3>機能説明</h3>
+            <ul style="margin-left: 20px; color: #666; line-height: 1.8;">
+                <li><strong>通知バナー：</strong> 画面上部に重要なお知らせを表示（優先度: high のもの）</li>
+                <li><strong>ベルアイコン：</strong> 未読件数をバッジで表示</li>
+                <li><strong>ポップオーバー：</strong> クリックでお知らせ一覧を表示</li>
+                <li><strong>タイプ別色分け：</strong>
+                    <ul style="margin-left: 20px; margin-top: 8px;">
+                        <li>🟡 メンテナンス（黄色）</li>
+                        <li>🔵 情報（青）</li>
+                        <li>🔴 警告（赤）</li>
+                        <li>🟢 アップデート（緑）</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function closeBanner() {
+            const banner = document.getElementById('banner');
+            banner.style.animation = 'slideDown 0.3s ease-out reverse';
+            setTimeout(() => {
+                banner.style.display = 'none';
+            }, 300);
+        }
+
+        function togglePopover() {
+            const popover = document.getElementById('popover');
+            popover.classList.toggle('show');
+        }
+
+        // ポップオーバーの外側をクリックしたら閉じる
+        document.addEventListener('click', function(event) {
+            const popover = document.getElementById('popover');
+            const button = document.querySelector('.notification-button');
+            
+            if (!popover.contains(event.target) && !button.contains(event.target)) {
+                popover.classList.remove('show');
+            }
+        });
+
+        // デモ用：3秒後に未読バッジの数を変更
+        setTimeout(() => {
+            const badge = document.querySelector('.notification-badge');
+            if (badge) {
+                badge.textContent = '2';
+            }
+        }, 3000);
+    </script>
+</body>
+</html>

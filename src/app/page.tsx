@@ -5,6 +5,8 @@ import CurrentTime from "./presentation/components/currentTime";
 import SendCheckout from "./presentation/components/sendCheckout.client";
 import CheckoutWithText from "./presentation/components/checkoutWithText";
 import AutoGeminiMessage from "./presentation/components/autoGeminiMessage";
+import AnnouncementBanner from "./presentation/components/announcement/AnnouncementBanner";
+import NotificationIcon from "./presentation/components/announcement/NotificationIcon";
 import { useState } from "react";
 import { useSession, signOut, signIn } from "next-auth/react";
 
@@ -37,15 +39,18 @@ export default function Home(): JSX.Element {
   }
 
   return (
-    <main className={checkoutStyles.main} id="main">
-      <div className={checkoutStyles.mainPosition}>
-        <div className={checkoutStyles.logoutButton}>
-          <button
-            onClick={() => signOut({ callbackUrl: '/' })}
-            className={checkoutStyles.logout}>
-              ログアウト
-          </button>
-        </div>
+    <>
+      <AnnouncementBanner />
+      <main className={checkoutStyles.main} id="main">
+        <div className={checkoutStyles.mainPosition}>
+          <div className={checkoutStyles.logoutButton}>
+            <NotificationIcon />
+            <button
+              onClick={() => signOut({ callbackUrl: '/' })}
+              className={checkoutStyles.logout}>
+                ログアウト
+            </button>
+          </div>
         <SendCheckout hideUserRadioButtons={hideUserRadioButtons} />
         <CurrentTime />
         <CheckoutWithText
@@ -61,5 +66,6 @@ export default function Home(): JSX.Element {
                 <AutoGeminiMessage />
       </div>
     </main>
+    </>
   );
 }
