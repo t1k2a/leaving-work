@@ -16,18 +16,24 @@ function SendCheckout({ hideUserRadioButtons = false }: SendCheckoutProps) {
   const [userId, setUserId] = useState<string | null>(null);
   const [isTemporarilyDisabled, disableTemporarily] = useTemporaryDisable();
   const handleClick: React.TouchEventHandler<HTMLButtonElement> = async function () {
+    // ユーザー選択チェック
+    if (!userId) {
+      alert('ユーザーを選択してください')
+      return;
+    }
+
     // ボタンを一時的に無効化
     disableTemporarily();
     
     // postWorkRecord APIを呼び出す
-    if (userId) {
-      try {
-        const now = new Date();
-        const clockOutTime = now.toISOString();
-        await postWorkRecord(String(userId), clockOutTime);
-      } catch (error) {
-        console.error('退勤記録の登録に失敗しました:', error);
-      }
+    try {
+      const now = new Date();
+      const clockOutTime = now.toISOString();
+      await postWorkRecord(String(userId), clockOutTime);
+      alert('退勤登録が完了しました');
+    } catch (error) {
+      console.error('退勤記録の登録に失敗しました:', error);
+      alert('退勤登録に失敗しました');
     }
     
     const responseStatus: number = await sendCheckoutRequest(null, userName);
@@ -37,7 +43,7 @@ function SendCheckout({ hideUserRadioButtons = false }: SendCheckoutProps) {
     setUserName(userName);
     setUserId(userId);
   };
-  const isButtonDisabled = hideUserRadioButtons || isTemporarilyDisabled;
+  const isButtonDisabled = !userId || hideUserRadioButtons || isTemporarilyDisabled;
 
   return (
     <div>
