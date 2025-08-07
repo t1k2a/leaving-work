@@ -30,7 +30,7 @@ export default function AnnouncementBanner() {
       });
   }, []);
 
-  const getIcon = (type: string) => {
+  const getIcon = (type: Announcement['type']) => {
     switch(type) {
       case 'maintenance': return '⚠️';
       case 'info': return 'ℹ️';
