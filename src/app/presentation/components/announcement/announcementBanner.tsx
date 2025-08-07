@@ -24,7 +24,10 @@ export default function AnnouncementBanner() {
           setAnnouncement(activeAnnouncements[0]);
         }
       })
-      .catch(err => console.error('Failed to fetch announcements:', err));
+      .catch(err => {
+        console.error('Failed to fetch announcements:', err)
+        alert('お知らせの取得に失敗しました')
+      });
   }, []);
 
   const getIcon = (type: string) => {
