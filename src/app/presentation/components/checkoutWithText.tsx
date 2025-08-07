@@ -43,7 +43,7 @@ function CheckoutWithText({ onModalOpen, onModalClose }: CheckoutWithTextProps) 
       alert('ユーザーを選択してください')
       return;
     }
-
+        
     disableTemporarily();
     const responseStatus = await sendCheckoutRequest(inputValue, userName);
     showAlertForCheckout(responseStatus, openModal)
