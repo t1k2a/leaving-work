@@ -2,18 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import styles from '../../styles/announcement.module.css';
-
-interface Announcement {
-  id: string;
-  title: string;
-  message: string;
-  type: 'maintenance' | 'info' | 'warning' | 'update';
-  priority: 'high' | 'medium' | 'low';
-  startDate: string;
-  endDate: string;
-  isActive: boolean;
-  createdAt: string;
-}
+import { Announcement } from '@/types/announcement'
 
 export default function AnnouncementBanner() {
   const [announcement, setAnnouncement] = useState<Announcement | null>(null);
@@ -35,10 +24,13 @@ export default function AnnouncementBanner() {
           setAnnouncement(activeAnnouncements[0]);
         }
       })
-      .catch(err => console.error('Failed to fetch announcements:', err));
+      .catch(err => {
+        console.error('Failed to fetch announcements:', err)
+        alert('お知らせの取得に失敗しました')
+      });
   }, []);
 
-  const getIcon = (type: string) => {
+  const getIcon = (type: Announcement['type']) => {
     switch(type) {
       case 'maintenance': return '⚠️';
       case 'info': return 'ℹ️';
