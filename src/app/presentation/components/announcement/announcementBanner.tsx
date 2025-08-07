@@ -2,18 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import styles from '../../styles/announcement.module.css';
-
-interface Announcement {
-  id: string;
-  title: string;
-  message: string;
-  type: 'maintenance' | 'info' | 'warning' | 'update';
-  priority: 'high' | 'medium' | 'low';
-  startDate: string;
-  endDate: string;
-  isActive: boolean;
-  createdAt: string;
-}
+import { Announcement } from '@/types/announcement'
 
 export default function AnnouncementBanner() {
   const [announcement, setAnnouncement] = useState<Announcement | null>(null);
