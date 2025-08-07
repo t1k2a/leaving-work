@@ -415,6 +415,16 @@
             document.getElementById('bossLabel').textContent = `BOSS ${currentBossLevel}`;
             document.getElementById('bossHealthBar').style.display = 'block';
             updateBossHealth();
+
+            // ボス出現と同時に自動射撃を開始
+            if (autoShootInterval) {
+                clearInterval(autoShootInterval);
+            }
+            autoShootInterval = setInterval(() => {
+                if (gameRunning && boss) {
+                    createBullet(player.x + player.width / 2, player.y);
+                }
+            }, 400);
         }
         
         function updateBossHealth() {
@@ -719,6 +729,10 @@
             if (boss.hp <= 0) {
                 score += 1000 * boss.level;
                 updateScore();
+                if (autoShootInterval) {
+                    clearInterval(autoShootInterval);
+                    autoShootInterval = null;
+                }
                 boss = null;
                 bossActive = false;
                 document.getElementById('bossLabel').style.display = 'none';
@@ -759,7 +773,7 @@
                     bullet.y + bullet.height > boss.y) {
                     
                     bullets.splice(bulletIndex, 1);
-                    boss.hp -= 10;
+                    boss.hp -= 5;
                     updateBossHealth();
                 }
             });
@@ -962,15 +976,17 @@
             
             resizeCanvas();
             
-            // 自動射撃を開始
+            // 自動射撃はボス出現まで開始しない
             if (autoShootInterval) {
                 clearInterval(autoShootInterval);
+                autoShootInterval = null;
             }
+
             autoShootInterval = setInterval(() => {
                 if (gameRunning) {
                     createBullet(player.x + player.width / 2, player.y);
                 }
-            }, 200);
+            }, 400);
             
             gameLoop();
         }
@@ -984,7 +1000,7 @@
             if (!bossActive && !boss && !gameCompleted) {
                 if (!showBossIntro) {
                     showBossIntroduction();
-                } else if (Date.now() - bossIntroTimer > 2000) {
+                } else if (Date.now() - bossIntroTimer > 1000) {
                     createBoss();
                     showBossIntro = false;
                 }
