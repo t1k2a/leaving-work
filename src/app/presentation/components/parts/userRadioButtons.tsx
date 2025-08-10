@@ -14,16 +14,13 @@ export default function UserRadioButtons({ handleChange, selectedValue = null}: 
     
     useEffect(() => {
       // STG環境の時だけユーザー名を変更する
-      let userName1: string = ''
-      let userName2: string = ''
-      if (isStg()) {
-        userName1 = process.env.NEXT_PUBLIC_NAME_TEST1 || "テストユーザー1"
-        userName2 = process.env.NEXT_PUBLIC_NAME_TEST2 || "テストユーザー2"
-      } else {
-        userName1 = process.env.NEXT_PUBLIC_NAME1 || "ユーザー1"
-        userName2 = process.env.NEXT_PUBLIC_NAME2 || "ユーザー2"
-      }
-
+      const isStaging: boolean = isStg()
+      const userName1: string = isStaging
+        ? process.env.NEXT_PUBLIC_NAME_TEST1 || "テストユーザー1"
+        : process.env.NEXT_PUBLIC_NAME1 || "ユーザー1";
+       const userName2 = isStaging
+        ? process.env.NEXT_PUBLIC_NAME_TEST2 || "テストユーザー2"
+        : process.env.NEXT_PUBLIC_NAME2 || "ユーザー2";
       setName1(userName1);
       setName2(userName2);
       setUserId1(process.env.NEXT_PUBLIC_USER_ID1 || "default_user_1");
