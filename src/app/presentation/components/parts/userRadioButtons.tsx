@@ -13,21 +13,21 @@ export default function UserRadioButtons({ handleChange, selectedValue = null}: 
     const [userId2, setUserId2] = useState<string>("");
     
     useEffect(() => {
-      // stgの時だけユーザー名を変更する
+      // STG環境の時だけユーザー名を変更する
       let userName1: string = ''
       let userName2: string = ''
       if (isStg()) {
-        userName1 = process.env.NEXT_PUBLIC_NAME_TEST1 || ""
-        userName2 = process.env.NEXT_PUBLIC_NAME_TEST2 || ""
+        userName1 = process.env.NEXT_PUBLIC_NAME_TEST1 || "テストユーザー1"
+        userName2 = process.env.NEXT_PUBLIC_NAME_TEST2 || "テストユーザー2"
       } else {
-        userName1 = process.env.NEXT_PUBLIC_NAME1 || ""
-        userName2 = process.env.NEXT_PUBLIC_NAME2 || ""
+        userName1 = process.env.NEXT_PUBLIC_NAME1 || "ユーザー1"
+        userName2 = process.env.NEXT_PUBLIC_NAME2 || "ユーザー2"
       }
 
       setName1(userName1);
       setName2(userName2);
-      setUserId1(process.env.NEXT_PUBLIC_USER_ID1 || "");
-      setUserId2(process.env.NEXT_PUBLIC_USER_ID2 || "");
+      setUserId1(process.env.NEXT_PUBLIC_USER_ID1 || "default_user_1");
+      setUserId2(process.env.NEXT_PUBLIC_USER_ID2 || "default_user_2");
       }, []);
 
     const handleRadioChange  = (event: React.ChangeEvent<HTMLInputElement>): void => {
