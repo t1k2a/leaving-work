@@ -3,5 +3,11 @@ export function isDev(): boolean {
 }
 
 export function isStg(): boolean {
-    return process.env.VERCEL_ENV === 'preview';
+    if (typeof window === 'undefined') {
+        return false;
+    }
+    
+    const url = window.location.href;
+    
+    return url.includes('development') && !url.includes('localhost');
 }
