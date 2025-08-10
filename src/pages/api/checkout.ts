@@ -4,6 +4,7 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { ErrorHandler } from "../../app/utility/ErrorHandler";
 import { NextApiRequest, NextApiResponse } from "next";
+import { isDev, isStg } from '@/app/utility/checkEnvironment'
 
 interface CheckoutRequestBody {
   userName?: string;
@@ -47,16 +48,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const requestBody = req.body as CheckoutRequestBody;
   const userName = requestBody.userName;
   const prependText = requestBody.text;
-  const isDev: boolean = process.env.NODE_ENV === 'development';
-  const isStaging: boolean = process.env.VERCEL_ENV === 'preview';
   let lineAccessToken = '';
   let messageTO = '';
   const lineMessagePushUrl: string =  process.env.LINE_MESSAGE_PUSH_URL ?? ''
 
-  if (isDev) {
+  if (isDev()) {
     lineAccessToken = process.env.LINE_ACCESS_TOKEN_DEV ?? '';
     messageTO = process.env.ACCOUNT_ID_DEV ?? '';
-  } else if (isStaging) {
+  } else if (isStg()) {
     lineAccessToken = process.env.LINE_ACCESS_TOKEN_STG ?? '';
     messageTO = process.env.ACCOUNT_ID_STG ?? '';
   } else {
