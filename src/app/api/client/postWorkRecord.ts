@@ -1,3 +1,5 @@
+import { isDev } from '@/app/utility/checkEnvironment'
+
 function formattedDateTimeForJST(clockOutTime: string): string {
     // ISO形式の日時をJSTに変換
     const date: Date = new Date(clockOutTime);
@@ -7,10 +9,9 @@ function formattedDateTimeForJST(clockOutTime: string): string {
 }
 
 function setBaseURL(): string {
-    const isDev: boolean = process.env.NODE_ENV === 'development';
     let baseURL: string = '';
 
-    if (isDev) {
+    if (isDev()) {
         baseURL = process.env.NEXT_PUBLIC_LEAVING_WORK_API_URL_DEV ?? '';
     } else {
         baseURL = process.env.NEXT_PUBLIC_LEAVING_WORK_API_URL_PROD ?? '';
