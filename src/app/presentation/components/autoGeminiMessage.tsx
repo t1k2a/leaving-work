@@ -12,6 +12,7 @@ interface GeminiResponse {
 export default function AutoGeminiMessage() {
     const [message, setMessage] = useState<string>("");
     const [isLoading, setIsLoading] = useState(true);
+    const [loadingText, setLoadingText] = useState('通勤情報を取得中...');
     const [error, setError] = useState(false);
 
     useEffect(() => {
@@ -20,7 +21,15 @@ export default function AutoGeminiMessage() {
 
     const fetchGeminiMessage = async () => {
         try {
-            const response = await fetch('/api/geminiAPI', {
+            setLoadingText('通勤情報を取得中...');
+            const commuteRes = await fetch('/api/commute');
+            if (!commuteRes.ok) {
+                throw new Error(`Commute API error: ${commuteRes.status}`);
+            }
+            const commuteData = await commuteRes.json();
+
+            setLoadingText('メッセージを生成中...');
+            const response = await fetch(`/api/geminiAPI?station=${encodeURIComponent(commuteData.station)}&arrivalTime=${encodeURIComponent(commuteData.arrivalTime)}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -47,7 +56,7 @@ export default function AutoGeminiMessage() {
             <div className={styles.container}>
                 <div className={styles.loadingMessage}>
                     <div className={styles.spinner}></div>
-                    <span>今日の労いメッセージを取得中...</span>
+                    <span>{loadingText}</span>
                 </div>
             </div>
         );
