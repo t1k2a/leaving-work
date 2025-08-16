@@ -71,11 +71,13 @@ test.describe('認証テスト', () => {
     await loginPage.loginWithCredentials(
      process.env.AUTH_PASSWORD || 'jojine12'
     );
-    
-    await page.goto('/api/auth/signout');
-    await page.getByRole('button', { name: /sign out/i }).click();
-    
-    await homePage.goto();
-    expect(await homePage.isLoginButtonVisible()).toBe(true);
+    // アプリのログアウトボタンからログアウト（NextAuthの確認ページを経由しない）
+    await expect(page.getByRole('button', { name: 'ログアウト' })).toBeVisible();
+    await page.getByRole('button', { name: 'ログアウト' }).click();
+    // ホームは未ログイン時に即サインインへリダイレクトされるため、
+    // サインインページへの遷移とフォーム表示で検証する
+    // 実装はカスタムページ `/auth/signin` にリダイレクトするため、URLパターンを修正
+    await expect(page).toHaveURL(/\/auth\/signin/);
+    await expect(page.locator('#password')).toBeVisible();
   });
 });
