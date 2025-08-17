@@ -11,7 +11,7 @@ test.describe('チェックアウトフローテスト', () => {
     // Authenticate user before each test
     await authenticateUser(
       page,
-      process.env.TEST_USER_PASSWORD || 'jojine12'
+      process.env.AUTH_PASSWORD ?? 'jojine12',
     );
   });
 

@@ -19,22 +19,23 @@ export default defineConfig({
     actionTimeout: 10000, // 各アクションのタイムアウト
     navigationTimeout: 30000, // ナビゲーションのタイムアウト
   },
+  globalSetup: './e2e/global-setup.ts',
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Chrome'], storageState: 'e2e/.auth/user.json' },
     },
     {
       name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      use: { ...devices['Desktop Firefox'], storageState: 'e2e/.auth/user.json' },
     },
     {
       name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      use: { ...devices['Desktop Safari'], storageState: 'e2e/.auth/user.json' },
     },
     {
       name: 'mobile',
-      use: { ...devices['iPhone 13'] },
+      use: { ...devices['iPhone 13'], storageState: 'e2e/.auth/user.json' },
     },
   ],
   webServer: {
