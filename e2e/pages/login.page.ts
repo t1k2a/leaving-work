@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import { Page, expect } from '@playwright/test';
 import { BasePage } from './base.page';
 
 export class LoginPage extends BasePage {
@@ -12,32 +12,38 @@ export class LoginPage extends BasePage {
   }
 
   async loginWithCredentials(password: string) {
-    // サインインフォームの準備が整うまで待機
-    await this.page.waitForLoadState('domcontentloaded');
+    // 既ログインならログイン処理をスキップ
+    try {
+      const session = await this.page.request
+        .get('/api/auth/session')
+        .then((r) => r.json())
+        .catch(() => null as any);
+      if (session?.user) return;
+    } catch {}
 
-    // パスワード入力フィールドを取得（IDを優先）
+    // サインインフォームの出現 or ホームへのリダイレクト完了のどちらかを待つ
     const passwordInput = this.page.locator('#password');
-    
-    // パスワードフィールドが存在するか確認
-    const count = await passwordInput.count();
-    if (count === 0) {
-      console.log('Password input not found. Page HTML:');
-      console.log(await this.page.content());
-      throw new Error('Password input field not found');
+
+    const outcome = await Promise.race([
+      passwordInput.waitFor({ state: 'visible', timeout: 8000 }).then(() => 'form' as const),
+      this.page.waitForURL('**/', { waitUntil: 'domcontentloaded', timeout: 8000 }).then(() => 'home' as const),
+    ]).catch(() => 'form' as const); // フォームを前提に続行（環境によりURL待機が先に解決しない場合に備え）
+
+    if (outcome === 'home') {
+      // 既にホームへリダイレクト済み（認証済み）
+      return;
     }
-    
-    // パスワードを入力
-    await passwordInput.waitFor({ state: 'visible', timeout: 30000 });
+
+    // フォームが見えている場合は入力して送信
+    await expect(passwordInput).toBeVisible();
     await passwordInput.fill(password);
-    
-    // サインインボタンを探す（日本語UIを優先、フォールバック含む）
+
     const signInButton = this.page
       .locator('button:has-text("ログイン"), input[type="submit"], button[type="submit" ]')
       .first();
-    
-    await signInButton.waitFor({ state: 'visible', timeout: 10000 });
+    await expect(signInButton).toBeVisible();
     await signInButton.click();
-    
+
     // 成否により挙動が異なるため、ここでは固定のURL待機はしない。
     // 成功時: 呼び出し側のテストで `toHaveURL('/')` 等を検証
     // 失敗時: 呼び出し側のテストでエラーメッセージ可視を検証
