@@ -27,7 +27,7 @@ test.describe('認証テスト', () => {
     );
     
     // 最終的にホームページにリダイレクトされることを確認
-    await page.waitForURL('http://localhost:3000/', { waitUntil: 'networkidle' });
+    await page.waitForURL('http://localhost:3000/', { waitUntil: 'domcontentloaded' });
     expect(page.url()).toBe('http://localhost:3000/');
     
     // ログアウトボタンが表示されることを確認（ログイン成功の証）
@@ -48,8 +48,14 @@ test.describe('認証テスト', () => {
     await loginPage.loginWithCredentials(
       process.env.AUTH_PASSWORD || 'jojine12'
     );
-    
-    await page.reload();
+
+    // まずはホームの描画完了を待つ
+    await page.waitForURL('http://localhost:3000/', { waitUntil: 'domcontentloaded'});
+    const logoutButton = page.getByRole('button', { name: 'ログアウト' });
+    await expect(logoutButton).toBeVisible();
+
+    // リロードも安定化してから検証
+    await page.reload({ waitUntil: 'domcontentloaded'});
     // リロード直後は `status === "loading"` により一時的に「読み込み中...」が表示されるため、
     // ログアウトボタンの可視性をロケータで待って検証する（自動待機を活用）
     await expect(page.getByRole('button', { name: 'ログアウト' })).toBeVisible();
@@ -60,13 +66,15 @@ test.describe('認証テスト', () => {
     await loginPage.loginWithCredentials(
      process.env.AUTH_PASSWORD || 'jojine12'
     );
-    // アプリのログアウトボタンからログアウト（NextAuthの確認ページを経由しない）
-    await expect(page.getByRole('button', { name: 'ログアウト' })).toBeVisible();
-    await page.getByRole('button', { name: 'ログアウト' }).click();
-    // ホームは未ログイン時に即サインインへリダイレクトされるため、
-    // サインインページへの遷移とフォーム表示で検証する
-    // 実装はカスタムページ `/auth/signin` にリダイレクトするため、URLパターンを修正
-    await expect(page).toHaveURL(/\/auth\/signin/);
+    
+    // ログイン直後にページ準備完了を待つ
+    await page.waitForURL('http://localhost:3000/', {waitUntil: 'domcontentloaded'})
+
+    const logoutButton = page.getByRole('button', {name: 'ログアウト'});
+    await expect(logoutButton).toBeVisible();
+    await logoutButton.click()
+    // ログアウト後の遷移を明示的に検証
+  await expect(page).toHaveURL(/\/auth\/signin/);
     await expect(page.locator('#password')).toBeVisible();
   });
 });
