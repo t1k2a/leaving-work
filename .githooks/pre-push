@@ -13,4 +13,3 @@ echo "[pre-push] PlaywrightスモークE2Eを実行します…"
 npm run --silent test:e2e:smoke
 
 echo "[pre-push] E2E成功。pushを続行します。"
-git
