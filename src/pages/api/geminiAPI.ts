@@ -1,8 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
-
 const ultraFastMessages = [
   "**お疲れ様！** 🌟",
   "**今日もGood Job！** ✨", 
@@ -27,6 +25,9 @@ async function geminiAPImain(prompt?: string): Promise<string> {
   const instruction = "を一言で答えて";
 
   const selectedPrompt = prompt || quickPrompts[Math.floor(Math.random() * quickPrompts.length)];
+
+  // Lazy init to avoid constructing client when faked in E2E
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
   const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
   const commonPrompts = "。10-30文字、日本語、改行OK。「はい、承知しました。」等の挨拶は不要。文字数も表示させないで";
@@ -49,6 +50,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
+    // E2E/CI: short-circuit to avoid real Gemini calls
+    const useFake = process.env.E2E_FAKE_LLM === '1' || process.env.NODE_ENV === 'test';
+    if (useFake) {
+      return res.status(200).json({
+        text: "**E2E用ダミーメッセージ** 🌟",
+        timestamp: new Date().toISOString(),
+        fallback: true
+      });
+    }
+
     // Gemini APIを直接呼び出し
     const text = await geminiAPImain();
         

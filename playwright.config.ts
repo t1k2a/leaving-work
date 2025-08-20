@@ -43,5 +43,9 @@ export default defineConfig({
     port: 3000,
     timeout: 120 * 1000,
     reuseExistingServer: !process.env.CI,
+    env: {
+      ...process.env,
+      E2E_FAKE_LLM: '1',
+    },
   },
 });

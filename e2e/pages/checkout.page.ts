@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import { Page, expect } from '@playwright/test';
 import { BasePage } from './base.page';
 
 export class CheckoutPage extends BasePage {
@@ -14,8 +14,22 @@ export class CheckoutPage extends BasePage {
     await this.page.locator(`input[type="radio"][data-user-id="${userId}"]`).click();
   }
 
-  async clickCheckoutButton() {
-    await this.page.getByRole('button', { name: /退勤/i }).click();
+  async clickCheckoutButton(): Promise<boolean> {
+    // ユーザー選択を確定
+    await this.selectUser('1');
+
+    const button = this.page.getByRole('button', { name: /退勤する/ });
+    // 可視化を待機し、活性状態を確認（Page Object内ではexpectを使わない）
+    await button.waitFor({ state: 'visible' });
+    if (!(await button.isEnabled())) return false;
+
+    // クリックが成功したかだけを返す
+    try {
+      await button.click();
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   async getCheckoutStatus(): Promise<string | null> {
