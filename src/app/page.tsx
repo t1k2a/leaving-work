@@ -46,7 +46,7 @@ export default function Home(): JSX.Element {
         <div className={checkoutStyles.logoutButton}>
           <NotificationIcon />
           <button
-            onClick={() => signOut({ callbackUrl: '/' })}
+            onClick={() => signOut({ callbackUrl: '/auth/signin' })}
             className={checkoutStyles.logout}>
               ログアウト
           </button>
