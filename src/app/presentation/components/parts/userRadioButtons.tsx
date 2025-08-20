@@ -18,9 +18,9 @@ export default function UserRadioButtons({ handleChange, selectedValue = null}: 
       const userName1: string = isStaging
         ? process.env.NEXT_PUBLIC_NAME_TEST1 || "テストユーザー1"
         : process.env.NEXT_PUBLIC_NAME1 || "ユーザー1";
-       const userName2 = isStaging
-        ? process.env.NEXT_PUBLIC_NAME_TEST2 || "テストユーザー2"
-        : process.env.NEXT_PUBLIC_NAME2 || "ユーザー2";
+      const userName2 = isStaging
+      ? process.env.NEXT_PUBLIC_NAME_TEST2 || "テストユーザー2"
+      : process.env.NEXT_PUBLIC_NAME2 || "ユーザー2";
       setName1(userName1);
       setName2(userName2);
       setUserId1(process.env.NEXT_PUBLIC_USER_ID1 || "default_user_1");
