@@ -21,7 +21,7 @@ export interface GeminiResponse {
 async function geminiAPImain(prompt?: string): Promise<string> {
   const quickPrompts = [
     "疲れた人への優しい一言。年上男性の穏やかな労りで。",
-    "仕事終わりの癒しの言葉。疲れた人に友達風でゆるく寄り添う癒しの言葉を。",
+    "仕事終わりの癒しの言葉。疲れた人に友達風でゆるく寄り添う癒しの言葉を。", 
   ];
 
   const instruction = "を一言で答えて";
@@ -49,14 +49,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const station = typeof req.query.station === 'string' ? req.query.station : undefined;
-    const arrivalTime = typeof req.query.arrivalTime === 'string' ? req.query.arrivalTime : undefined;
-
-    const prompt = station && arrivalTime
-      ? `疲れた人への優しい一言。勤務先から${station}まで${arrivalTime}に到着します`
-      : undefined;
-
-    const text = await geminiAPImain(prompt);
+    // Gemini APIを直接呼び出し
+    const text = await geminiAPImain();
         
     return res.status(200).json({ 
       text,
