@@ -9,7 +9,7 @@ test.describe('認証スモーク', () => {
     test('保護ページはサインインへ遷移する', async ({ page }) => {
       await page.goto('/', { waitUntil: 'domcontentloaded' });
       // Firefox では環境によって NextAuth のエラーページに遷移することがあるため許容
-      await expect(page).toHaveURL(/\/(auth\/signin|api\/auth\/error|localhost)(?:\?.*)?$/);
+      await expect(page).toHaveURL(/\/(?:auth\/signin|api\/auth\/error)(?:\?.*)?$/)
     });
   });
 
