@@ -1,19 +1,23 @@
-# ベースイメージ
-FROM golang:1.24.3-alpine
+# ビルドステージ
+FROM golang:1.24.3-alpine AS builder
 
-# 作業ディレクトリを作成
 WORKDIR /app
 
-# go.mod, go.sum を先にコピーして依存解決
-COPY go.mod ./
-COPY go.sum ./
+COPY go.mod go.sum ./
 RUN go mod download
 
-# 残りのソースコードをコピー
 COPY . .
 
-# アプリをビルド
-RUN go build -o main .
+# 静的リンクされたバイナリを生成
+RUN CGO_ENABLED=0 go build -o /main .
+
+# 実行ステージ
+FROM alpine:latest
+
+WORKDIR /app
+
+# ビルドステージからバイナリのみをコピー
+COPY --from=builder /main .
 
 # コンテナ起動時に実行されるコマンド
 CMD ["./main"]
