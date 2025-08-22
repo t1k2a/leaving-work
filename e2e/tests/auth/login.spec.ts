@@ -6,7 +6,7 @@ test.describe('認証スモーク', () => {
   test.describe('未認証', () => {
     test.use({ storageState: { cookies: [], origins: [] } });
 
-    test('保護ページはサインインへ遷移する', async ({ page }) => {
+    test('未ログインの場合はサインインへ遷移する', async ({ page }) => {
       await page.goto('/', { waitUntil: 'domcontentloaded' });
       // Firefox では環境によって NextAuth のエラーページに遷移することがあるため許容
       await expect(page).toHaveURL(/\/(?:auth\/signin|api\/auth\/error)(?:\?.*)?$/)
@@ -15,7 +15,7 @@ test.describe('認証スモーク', () => {
 
   // 認証済み: 保護ページにアクセスできる（storageState は globalSetup で作成済み）
   test.describe('認証済み', () => {
-    test('保護ページを表示できる', async ({ page }) => {
+    test('ログインの場合にトップ画面を表示できる', async ({ page }) => {
       await page.goto('/', { waitUntil: 'domcontentloaded' });
       await expect(page.getByRole('button', { name: 'ログアウト' })).toBeVisible();
     });
