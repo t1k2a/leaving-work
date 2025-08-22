@@ -14,12 +14,6 @@ import (
 	"github.com/joho/godotenv"
 )
 
-type WorkRecord struct {
-	ID int `json:"id"`
-	UserID string `json:"user_id"`
-	ClockOutTime string `json:"clock_out_time"`
-}
-
 func main() {
 	// .envファイルを読み込み
 	if err := godotenv.Load(); err != nil {
