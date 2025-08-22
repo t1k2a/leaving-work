@@ -25,23 +25,25 @@ function SendCheckout({ hideUserRadioButtons = false }: SendCheckoutProps) {
 
     // ボタンを一時的に無効化
     disableTemporarily();
-    
-    // postWorkRecord APIを呼び出す
+
     try {
       const now = new Date();
       const clockOutTime = now.toISOString();
 
+      // 開発時のみ直接バックエンドAPIを叩く
       if (isDev()) {
         await postWorkRecord(String(userId), clockOutTime);
         alert('退勤登録が完了しました');
       }
-    } catch (error) {
+
+      // 退勤メッセージ送信
+      const responseStatus: number = await sendCheckoutRequest(null, userName);
+      showAlertForCheckout(responseStatus)
+    } catch (error: unknown) {
       console.error('退勤記録の登録に失敗しました:', error);
-      alert('退勤登録に失敗しました');
+      const message = error instanceof Error ? error.message : '退勤登録に失敗しました';
+      alert(message);
     }
-    
-    const responseStatus: number = await sendCheckoutRequest(null, userName);
-    showAlertForCheckout(responseStatus)
   };
   const handleRadioChange = (userName: string, userId: string): void => {
     setUserName(userName);
