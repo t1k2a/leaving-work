@@ -57,5 +57,5 @@ func main() {
 	r.Post("/work_records", h.CreateWorkRecord)
 	
 	log.Println("Server running on :8080")
-	http.ListenAndServe(":8080", r)
+	log.Ftal(http.ListenAndServe(":8080", r))
 }
