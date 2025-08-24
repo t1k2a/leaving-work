@@ -17,10 +17,12 @@ func NewWorkRecordRepository() WorkRecordRepository {
 	return &workRecordRepository{}
 }
 
-func (r *workRecordRepository) FindByUserID(userID string) []model.WorkRecord {
+func (r *workRecordRepository) FindByUserID(userID string) ([]model.WorkRecord, error) {
 	var records []model.WorkRecord
-	db.DB.Where("user_id = ?", userID).Find(&records)
-	return records
+	if err := db.DB.Where("user_id = ?", userID).Find(&records).Error; err != nil {
+		return nil, err
+	}
+	return records, nil
 }
 
 // ユーザー存在チェック
