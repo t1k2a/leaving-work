@@ -26,16 +26,17 @@ func (r *workRecordRepository) FindByUserID(userID string) ([]model.WorkRecord, 
 }
 
 // ユーザー存在チェック
-func (r *workRecordRepository) UserExists(userID string) bool {
+func (r *workRecordRepository) UserExists(userID string) (bool, error) {
 	var count int64
 	result := db.DB.Model(&model.User{}).Where("id = ?", userID).Count(&count)
 	if result.Error != nil {
 		// エラーログを出力
-		println("UserExists error:", result.Error.Error())
+		log.Printf("UserExists DB error: %v", result.Error)
+		return false, result.Error
 	}
 
 	println("UserExists: userID =", userID, ", count =", count)
-	return count > 0
+	return count > 0, nil
 }
 
 // 退勤記録を保存
@@ -49,7 +50,7 @@ func (r *workRecordRepository) CreateWorkRecord(userID, clockOutTime string) (*m
 
 	// 直接SQLを実行して
 	if err := db.DB.Create(record).Error; err != nil {
-		println("CreateWorkRecord DB error:", err.Error())
+		log.Printf("CreateWorkRecord DB error:", err.Error())
 		return nil, err
 	}
 	println("CreateWorkRecord: Successfully created record with ID =", record.ID)
