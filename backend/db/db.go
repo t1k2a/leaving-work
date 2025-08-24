@@ -25,7 +25,7 @@ func Init() {
 		getEnv("DB_PASSWORD", "password"),
 		getEnv("DB_NAME", "leaving_work"),
 		getEnv("DB_PORT", "5432"),
-		getEnv("DB_SSLMODE", "disable")
+		getEnv("DB_SSLMODE", "disable"),
 	)
 
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
