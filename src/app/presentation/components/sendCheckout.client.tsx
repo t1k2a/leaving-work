@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import UserRadioButtons from "./parts/userRadioButtons";
 import { useTemporaryDisable } from "@/app/hooks/useTemporaryDisable";
 import { postWorkRecord } from "@/app/api/client/postWorkRecord"
-import { isDev } from '@/app/utility/checkEnvironment'
+import { isDev, isStg } from '@/app/utility/checkEnvironment'
 
 interface SendCheckoutProps {
   hideUserRadioButtons?: boolean;
@@ -31,7 +31,7 @@ function SendCheckout({ hideUserRadioButtons = false }: SendCheckoutProps) {
       const clockOutTime = now.toISOString();
 
       // 開発時のみ直接バックエンドAPIを叩く
-      if (isDev()) {
+      if (isDev() || isStg()) {
         await postWorkRecord(String(userId), clockOutTime);
         alert('退勤登録が完了しました');
       }
