@@ -20,7 +20,7 @@ export default function AutoGeminiMessage() {
 
     const fetchGeminiMessage = async () => {
         try {
-            const response = await fetch('/api/gminiAPI', {
+            const response = await fetch('/api/geminiAPI', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
