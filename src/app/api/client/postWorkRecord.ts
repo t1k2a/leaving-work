@@ -43,4 +43,6 @@ export const postWorkRecord = async (
         const errorText = await res.text()
         throw new Error(`退勤登録に失敗しました: ${errorText}`)
     }
+
+    console.log('退勤の記録が完了しました');
 }
