@@ -29,12 +29,7 @@ function SendCheckout({ hideUserRadioButtons = false }: SendCheckoutProps) {
     try {
       const now = new Date();
       const clockOutTime = now.toISOString();
-
-      // 開発時のみ直接バックエンドAPIを叩く
-      if (isDev() || isStg()) {
-        await postWorkRecord(String(userId), clockOutTime);
-        alert('退勤登録が完了しました');
-      }
+      await postWorkRecord(String(userId), clockOutTime);
 
       // 退勤メッセージ送信
       const responseStatus: number = await sendCheckoutRequest(null, userName);
