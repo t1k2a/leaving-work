@@ -36,9 +36,8 @@ function SendCheckout({ hideUserRadioButtons = false }: SendCheckoutProps) {
       const responseStatus: number = await sendCheckoutRequest(null, userName);
       showAlertForCheckout(responseStatus)
     } catch (error: unknown) {
-      console.error('退勤記録の登録に失敗しました:', error);
-      const message = error instanceof Error ? error.message : '退勤登録に失敗しました';
-      alert(message);
+      console.error('退勤送信エラー:', error);
+      alert('退勤の送信に失敗しました');
     }
   };
   const handleRadioChange = (userName: string, userId: string): void => {
