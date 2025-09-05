@@ -8,7 +8,7 @@ function formattedDateTimeForJST(clockOutTime: string): string {
     return jstDate.toISOString();
 }
 
-function setBaseURL(): string {
+function setBaseURL(): string | undefined {
     let baseURL: string = '';
 
     if (isDev()) {
@@ -18,7 +18,8 @@ function setBaseURL(): string {
     }
 
     if (!baseURL) {
-        throw new Error('API URLが設定されていません')
+        console.warn('API URLが未設定のため送信スキップ')
+        return; // 例外エラーを出さずに静かに終える
     }
 
     return baseURL;
@@ -30,6 +31,10 @@ export const postWorkRecord = async (
 ): Promise<void> => {
     const jstTimeString = formattedDateTimeForJST(clockOutTime);
     const baseURL = setBaseURL();
+    if (!baseURL) {
+        // ベースURL未設定時は安全に終了（UIはブロックしない）
+        return;
+    }
     const res = await fetch(`${baseURL}/work_records`, {
         method: "POST",
         headers: { "Content-Type": "application/json"},
@@ -43,4 +48,6 @@ export const postWorkRecord = async (
         const errorText = await res.text()
         throw new Error(`退勤登録に失敗しました: ${errorText}`)
     }
+
+    console.log('退勤の記録が完了しました');
 }

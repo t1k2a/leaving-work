@@ -3,11 +3,22 @@ export function isDev(): boolean {
 }
 
 export function isStg(): boolean {
-    if (typeof window === 'undefined') {
-        return false;
-    }
-    
-    const url = window.location.href;
-    
-    return url.includes('development') && !url.includes('localhost');
+  if (typeof window === 'undefined') {
+    return process.env.VERCEL_ENV === 'preview';
+  }
+
+  const publicEnv = process.env.NEXT_PUBLIC_VERCEL_ENV;
+  if (publicEnv) {
+    return publicEnv === 'preview';
+  }
+
+  if (process.env.VERCEL_ENV) {
+    return process.env.VERCEL_ENV === 'preview';
+  }
+
+  const host = window.location.host;
+  const isVercelDomain = /\.vercel\.app$/i.test(host);
+  const looksLikePreviewSubdomain = host.includes('-git-');
+  const isLocalhost = /localhost(:\d+)?$/.test(host);
+  return !isLocalhost && isVercelDomain && looksLikePreviewSubdomain;
 }
