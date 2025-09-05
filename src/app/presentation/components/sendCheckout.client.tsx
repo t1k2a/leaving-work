@@ -6,7 +6,6 @@ import React, { useState } from "react";
 import UserRadioButtons from "./parts/userRadioButtons";
 import { useTemporaryDisable } from "@/app/hooks/useTemporaryDisable";
 import { postWorkRecord } from "@/app/api/client/postWorkRecord"
-import { isDev, isStg } from '@/app/utility/checkEnvironment'
 
 interface SendCheckoutProps {
   hideUserRadioButtons?: boolean;
@@ -29,15 +28,16 @@ function SendCheckout({ hideUserRadioButtons = false }: SendCheckoutProps) {
     try {
       const now = new Date();
       const clockOutTime = now.toISOString();
-      await postWorkRecord(String(userId), clockOutTime);
+      // 読み込みが長く、画面の状態が変更されないため、APIの実行完了は待たない
+      void postWorkRecord(String(userId), clockOutTime)
+        .catch(err => console.warn('退勤記録の登録に失敗：', err));
 
       // 退勤メッセージ送信
       const responseStatus: number = await sendCheckoutRequest(null, userName);
       showAlertForCheckout(responseStatus)
     } catch (error: unknown) {
-      console.error('退勤記録の登録に失敗しました:', error);
-      const message = error instanceof Error ? error.message : '退勤登録に失敗しました';
-      alert(message);
+      console.error('退勤送信エラー:', error);
+      alert('退勤の送信に失敗しました');
     }
   };
   const handleRadioChange = (userName: string, userId: string): void => {

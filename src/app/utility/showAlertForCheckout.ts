@@ -5,6 +5,6 @@ export default function (responseStatus: number, openModal?: () => void): void {
         openModal?.()
         alert('退勤が記録されました');
     } else {
-        alert('退勤の際にエラーが発生したため、送信を取り消します');
+        alert('退勤の送信に失敗しました');
     }
 }
