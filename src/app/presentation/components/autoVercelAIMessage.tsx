@@ -31,7 +31,7 @@ export default function AutoVercelAIMessage() {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            const data: any = await response.json();
+            const data: VercelAIResponse = await response.json();
             setMessage(data.text);
         } catch (error) {
             console.error('VercelAI API呼び出しエラー:', error);
