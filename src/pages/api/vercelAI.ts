@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { GoogleGenerativeAI } from "@google/generative-ai";
+
+import { generateText } from 'ai';
 
 const ultraFastMessages = [
   "**お疲れ様！** 🌟",
@@ -9,14 +10,14 @@ const ultraFastMessages = [
   "**今日も最高！** 🙏"
 ];
 
-export interface GeminiResponse {
+export interface VercelAIResponse {
   text: string;
   timestamp: string;
   error?: string;
   fallbackMessage?: string;
 }
 
-async function geminiAPImain(prompt?: string): Promise<string> {
+async function vercelAImain(prompt?: string): Promise<string> {
   const quickPrompts = [
     "疲れた人への優しい一言。年上男性の穏やかな労りで。",
     "仕事終わりの癒しの言葉。疲れた人に友達風でゆるく寄り添う癒しの言葉を。", 
@@ -26,22 +27,19 @@ async function geminiAPImain(prompt?: string): Promise<string> {
 
   const selectedPrompt = prompt || quickPrompts[Math.floor(Math.random() * quickPrompts.length)];
 
-  // Lazy init to avoid constructing client when faked in E2E
-  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
-  const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-
   const commonPrompts = "。10-30文字、日本語、改行OK。「はい、承知しました。」等の挨拶は不要。文字数も表示させないで";
 
-  const response = await model.generateContent(selectedPrompt + instruction + commonPrompts);
+  // 内部でAIのAPI_KEYを参照している
+  const { text } = await generateText({
+    model: 'openai/gpt-5',
+    prompt: selectedPrompt + instruction + commonPrompts,
+  });
 
-  // 安全な文字列取得
-  const text = response?.response?.text();
-  
   if (!text || typeof text !== 'string') {
-    throw new Error('Invalid response from Gemini API');
+    throw new Error('Invalid response from Vercel AI (Google)');
   }
-  
-  return text.trim();
+
+  return String(text).trim();
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -50,7 +48,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    // E2E/CI: short-circuit to avoid real Gemini calls
     const useFake = process.env.E2E_FAKE_LLM === '1' || process.env.NODE_ENV === 'test';
     if (useFake) {
       return res.status(200).json({
@@ -60,8 +57,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
     }
 
-    // Gemini APIを直接呼び出し
-    const text = await geminiAPImain();
+    const text = await vercelAImain();
         
     return res.status(200).json({ 
       text,

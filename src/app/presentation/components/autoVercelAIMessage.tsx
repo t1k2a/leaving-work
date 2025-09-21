@@ -1,26 +1,26 @@
 "use client";
 import { useState, useEffect } from "react";
 import ReactMarkdown from 'react-markdown';
-import styles from "../styles/autoGemini.module.css";
+import styles from "../styles/autoVercelAI.module.css";
 
-interface GeminiResponse {
+interface VercelAIResponse {
     text: string;
     timestamp: string;
     error?: string;
 }
 
-export default function AutoGeminiMessage() {
+export default function AutoVercelAIMessage() {
     const [message, setMessage] = useState<string>("");
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        fetchGeminiMessage();
+        fetchVercelAIMessage();
     }, []);
 
-    const fetchGeminiMessage = async () => {
+    const fetchVercelAIMessage = async () => {
         try {
-            const response = await fetch('/api/geminiAPI', {
+            const response = await fetch('/api/vercelAI', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -31,10 +31,10 @@ export default function AutoGeminiMessage() {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            const data: GeminiResponse = await response.json();
+            const data: VercelAIResponse = await response.json();
             setMessage(data.text);
         } catch (error) {
-            console.error('Gemini API呼び出しエラー:', error);
+            console.error('VercelAI API呼び出しエラー:', error);
             setMessage("**今日も一日、本当にお疲れ様でした！** 🌟");
             setError(true);
         } finally {

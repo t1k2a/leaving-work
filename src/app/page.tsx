@@ -4,7 +4,7 @@ import checkoutStyles from "./presentation/styles/checkout.module.css";
 import CurrentTime from "./presentation/components/currentTime";
 import SendCheckout from "./presentation/components/sendCheckout.client";
 import CheckoutWithText from "./presentation/components/checkoutWithText";
-import AutoGeminiMessage from "./presentation/components/autoGeminiMessage";
+import AutoVercelAIMessage from "./presentation/components/autoVercelAIMessage";
 import AnnouncementBanner from "./presentation/components/announcement/announcementBanner";
 import NotificationIcon from "./presentation/components/announcement/notificationIcon";
 import { useState } from "react";
@@ -63,7 +63,7 @@ export default function Home(): JSX.Element {
           </button>
         </a>
         {/* AI自動メッセージ */}
-        <AutoGeminiMessage />
+        <AutoVercelAIMessage />
       </div>
     </main>
     </>
