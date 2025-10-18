@@ -4,7 +4,7 @@ import checkoutStyles from "./presentation/styles/checkout.module.css";
 import CurrentTime from "./presentation/components/currentTime";
 import SendCheckout from "./presentation/components/sendCheckout.client";
 import CheckoutWithText from "./presentation/components/checkoutWithText";
-import AutoVercelAIMessage from "./presentation/components/autoVercelAIMessage";
+import AutoMessage from "./presentation/components/autoMessage";
 import AnnouncementBanner from "./presentation/components/announcement/announcementBanner";
 import NotificationIcon from "./presentation/components/announcement/notificationIcon";
 import { useState } from "react";
@@ -62,8 +62,7 @@ export default function Home(): JSX.Element {
             ゲームをプレイする
           </button>
         </a>
-        {/* AI自動メッセージ */}
-        <AutoVercelAIMessage />
+        <AutoMessage />
       </div>
     </main>
     </>
