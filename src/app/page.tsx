@@ -7,6 +7,7 @@ import CheckoutWithText from "./presentation/components/checkoutWithText";
 import AutoMessage from "./presentation/components/autoMessage";
 import AnnouncementBanner from "./presentation/components/announcement/announcementBanner";
 import NotificationIcon from "./presentation/components/announcement/notificationIcon";
+import RouteSearchModal from "./presentation/components/routeSearchModal";
 import { useState } from "react";
 import { useSession, signOut, signIn } from "next-auth/react";
 
@@ -57,12 +58,8 @@ export default function Home(): JSX.Element {
           onModalOpen={handleTextCheckoutOpen}
           onModalClose={handleTextCheckoutClose}
         />
-        <a href="/game/index.html" className={checkoutStyles.gameButton}>
-          <button className={checkoutStyles.playGame}>
-            ゲームをプレイする
-          </button>
-        </a>
         <AutoMessage />
+        <RouteSearchModal />
       </div>
     </main>
     </>
